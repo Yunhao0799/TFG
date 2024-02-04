@@ -6,33 +6,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import com.yunhao.fakenewsdetector.R
 import com.yunhao.fakenewsdetector.databinding.FragmentFirstBinding
+import com.yunhao.fakenewsdetector.ui.view.common.FragmentBase
 import com.yunhao.fakenewsdetector.ui.viewmodel.LoginViewModel
+import com.yunhao.fakenewsdetector.ui.viewmodel.common.ViewModelBase
 import kotlinx.coroutines.launch
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class LoginFragment : Fragment() {
+class LoginFragment : FragmentBase<FragmentFirstBinding, ViewModelBase>() {
 
-    private var binding: FragmentFirstBinding? = null
+    override val viewModel: LoginViewModel by viewModels()
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-
-    private val viewModel: LoginViewModel by viewModels()
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentFirstBinding.inflate(inflater, container, false)
-        binding?.lifecycleOwner = viewLifecycleOwner
-        binding?.viewModel = viewModel
-        return binding?.root
+    override fun getLayoutId(): Int {
+        return R.layout.fragment_first
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
