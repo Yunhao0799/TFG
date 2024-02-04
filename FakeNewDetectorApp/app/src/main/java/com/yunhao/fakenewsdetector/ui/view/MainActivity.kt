@@ -1,7 +1,6 @@
-package com.yunhao.fakenewsdetector
+package com.yunhao.fakenewsdetector.ui.view
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -9,6 +8,9 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import com.yunhao.fakenewsdetector.R
 import com.yunhao.fakenewsdetector.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -21,12 +23,15 @@ class MainActivity : AppCompatActivity() {
 
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(_binding.root)
+        _binding.lifecycleOwner = this
 
         setSupportActionBar(_binding.toolbar)
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         _appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, _appBarConfiguration)
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

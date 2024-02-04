@@ -38,6 +38,9 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    dataBinding{
+        enable = true
+    }
 }
 
 dependencies {
@@ -56,6 +59,13 @@ dependencies {
 
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
+
+    // For MVVM
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
+    implementation("androidx.activity:activity-ktx:1.8.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+    implementation("androidx.databinding:databinding-ktx:8.2.2")
 }
 
 // Allow references to generated code
