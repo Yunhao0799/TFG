@@ -11,24 +11,24 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import com.yunhao.fakenewsdetector.R
 import com.yunhao.fakenewsdetector.databinding.ActivityMainBinding
+import com.yunhao.fakenewsdetector.ui.view.common.ActivityBase
 import com.yunhao.fakenewsdetector.ui.viewmodel.MainViewModel
+import com.yunhao.fakenewsdetector.ui.viewmodel.common.ViewModelBase
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ActivityBase<ActivityMainBinding, ViewModelBase>() {
+
+    override val viewModel: MainViewModel by viewModels()
+
+    override fun getLayoutId(): Int {
+        return R.layout.activity_main
+    }
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var binding: ActivityMainBinding
-
-    private val viewModel: MainViewModel by viewModels()
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = this
-
-        setSupportActionBar(binding.toolbar)
+        setSupportActionBar(binding!!.toolbar)
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)

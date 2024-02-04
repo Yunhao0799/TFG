@@ -18,7 +18,7 @@ abstract class FragmentBase<T: ViewDataBinding, U: ViewModel> : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, getLayoutId(),container, false)
+        binding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
         binding?.lifecycleOwner = viewLifecycleOwner
         binding?.setVariable(BR.viewModel, viewModel)
         return binding?.root
