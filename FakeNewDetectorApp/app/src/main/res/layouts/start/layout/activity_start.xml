@@ -3,7 +3,7 @@
     <data>
         <variable
             name = "viewModel"
-            type = "com.yunhao.fakenewsdetector.ui.viewmodel.MainViewModel"/>
+            type = "com.yunhao.fakenewsdetector.ui.viewmodel.StartViewModel"/>
     </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context=".ui.view.MainActivity">
+        tools:context=".ui.view.StartActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"

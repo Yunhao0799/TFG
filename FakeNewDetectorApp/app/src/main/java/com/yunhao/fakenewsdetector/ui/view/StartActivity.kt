@@ -11,14 +11,14 @@ import androidx.activity.viewModels
 import com.yunhao.fakenewsdetector.R
 import com.yunhao.fakenewsdetector.databinding.ActivityStartBinding
 import com.yunhao.fakenewsdetector.ui.view.common.ActivityBase
-import com.yunhao.fakenewsdetector.ui.viewmodel.MainViewModel
+import com.yunhao.fakenewsdetector.ui.viewmodel.StartViewModel
 import com.yunhao.fakenewsdetector.ui.viewmodel.common.ViewModelBase
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : ActivityBase<ActivityStartBinding, ViewModelBase>() {
+class StartActivity : ActivityBase<ActivityStartBinding, ViewModelBase>() {
 
-    override val viewModel: MainViewModel by viewModels()
+    override val viewModel: StartViewModel by viewModels()
 
     override fun getLayoutId(): Int {
         return R.layout.activity_start
