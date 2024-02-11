@@ -49,6 +49,14 @@ android {
             "src/main/res/layouts",
             "src/main/res"
         )
+
+        getByName("main").res.srcDirs(
+            "src/main/res/drawables/common",
+            "src/main/res/drawables/start",
+            "src/main/res/drawables/main",
+            "src/main/res/drawables ",
+            "src/main/res"
+        )
     }
 }
 
