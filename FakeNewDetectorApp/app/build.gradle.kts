@@ -41,6 +41,15 @@ android {
     dataBinding{
         enable = true
     }
+    sourceSets{
+        // Add custom folders in layout to the build
+        getByName("main").res.srcDirs(
+            "src/main/res/layouts/start",
+            "src/main/res/layouts/main",
+            "src/main/res/layouts",
+            "src/main/res"
+        )
+    }
 }
 
 dependencies {
