@@ -15,11 +15,13 @@ import com.yunhao.fakenewsdetector.databinding.FragmentFirstBinding
 import com.yunhao.fakenewsdetector.ui.view.common.FragmentBase
 import com.yunhao.fakenewsdetector.ui.viewmodel.LoginViewModel
 import com.yunhao.fakenewsdetector.ui.viewmodel.common.ViewModelBase
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
+@AndroidEntryPoint
 class LoginFragment : FragmentBase<FragmentFirstBinding, ViewModelBase>() {
 
     override val viewModel: LoginViewModel by viewModels()

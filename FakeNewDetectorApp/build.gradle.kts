@@ -4,3 +4,18 @@ plugins {
     id("org.jetbrains.kotlin.android") version "1.9.0" apply false
     id("com.google.dagger.hilt.android") version "2.44" apply false
 }
+
+allprojects {
+//    tasks
+//        .withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>()
+//        .configureEach {
+//            compilerOptions
+//                .allWarningsAsErrors
+//                .set(
+//                    true
+//                )
+////            compilerOptions
+////                .freeCompilerArgs
+////                .add("-Xlint:deprecation")
+//        }
+}

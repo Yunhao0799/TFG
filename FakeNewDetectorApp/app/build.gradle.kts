@@ -57,8 +57,8 @@ dependencies {
 
     implementation("com.google.android.material:material:1.11.0")
 
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    implementation("com.google.dagger:hilt-android:2.50")
+    kapt("com.google.dagger:hilt-android-compiler:2.50")
 
     // For MVVM
     implementation("androidx.fragment:fragment-ktx:1.6.2")

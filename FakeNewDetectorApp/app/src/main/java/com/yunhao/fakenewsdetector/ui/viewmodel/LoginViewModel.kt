@@ -4,11 +4,18 @@ import androidx.databinding.Bindable
 import com.yunhao.fakenewsdetector.ui.viewmodel.common.ViewModelBase
 import androidx.databinding.library.baseAdapters.BR
 import androidx.lifecycle.viewModelScope
+import com.yunhao.fakenewsdetector.domain.services.LoginService
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel() : ViewModelBase() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val loginService: LoginService
+) : ViewModelBase() {
+//class LoginViewModel() : ViewModelBase() {
 
     var welcomeText: String = ""
         @Bindable get
@@ -28,7 +35,11 @@ class LoginViewModel() : ViewModelBase() {
 
         viewModelScope.launch(Dispatchers.Main){
             testSuspend{
-                welcomeText = "it has been 10 seconds"
+                welcomeText = "callback of suspend func called"
+            }
+
+            testSuspend {
+                welcomeText = "${loginService.login("test", "test")}"
             }
         }
 

@@ -14,7 +14,9 @@ import com.yunhao.fakenewsdetector.databinding.ActivityMainBinding
 import com.yunhao.fakenewsdetector.ui.view.common.ActivityBase
 import com.yunhao.fakenewsdetector.ui.viewmodel.MainViewModel
 import com.yunhao.fakenewsdetector.ui.viewmodel.common.ViewModelBase
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ActivityBase<ActivityMainBinding, ViewModelBase>() {
 
     override val viewModel: MainViewModel by viewModels()
@@ -24,7 +26,7 @@ class MainActivity : ActivityBase<ActivityMainBinding, ViewModelBase>() {
     }
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
