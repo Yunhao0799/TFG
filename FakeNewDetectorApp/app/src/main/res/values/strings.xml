@@ -9,8 +9,8 @@
 
 <!-- Welcome fragment -->
     <string name="welcome_image_description">Welcome Image</string>
-    <string name="welcome">Welcome to the
-    Fake News
+    <string name="welcome">Welcome to the\n
+    Fake News\n
     Detector app</string>
     <string name="get_started">Get Started</string>
 </resources>
