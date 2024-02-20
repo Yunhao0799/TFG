@@ -8,22 +8,16 @@
     <fragment
         android:id="@+id/WelcomeFragment"
         android:name="com.yunhao.fakenewsdetector.ui.view.WelcomeFragment"
-        android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_welcome">
-
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
+            android:id="@+id/action_WelcomeFragment_to_LoginFragment"
             app:destination="@id/LoginFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/LoginFragment"
         android:name="com.yunhao.fakenewsdetector.ui.view.LoginFragment"
-        android:label="@string/first_fragment_label"
+        android:label="@string/login_fragment_label"
         tools:layout="@layout/fragment_login">
-
-<!--        <action-->
-<!--            android:id="@+id/action_FirstFragment_to_SecondFragment"-->
-<!--            app:destination="@id/SecondFragment" />-->
     </fragment>
 </navigation>

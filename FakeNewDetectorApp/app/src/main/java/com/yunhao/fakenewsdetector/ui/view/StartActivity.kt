@@ -8,6 +8,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
+import androidx.navigation.NavController
 import com.yunhao.fakenewsdetector.R
 import com.yunhao.fakenewsdetector.databinding.ActivityStartBinding
 import com.yunhao.fakenewsdetector.ui.view.common.ActivityBase
@@ -25,20 +26,26 @@ class StartActivity : ActivityBase<ActivityStartBinding, ViewModelBase>() {
     }
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setSupportActionBar(binding!!.toolbar)
 
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+
+        SetUpListeners()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
+//        menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
@@ -47,7 +54,7 @@ class StartActivity : ActivityBase<ActivityStartBinding, ViewModelBase>() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_settings -> true
+//            R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -56,5 +63,20 @@ class StartActivity : ActivityBase<ActivityStartBinding, ViewModelBase>() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+
+    private fun SetUpListeners() {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.WelcomeFragment -> {
+                    supportActionBar?.hide() // to hide
+                }
+
+                else -> {
+                    supportActionBar?.show() // to show
+                }
+            }
+        }
     }
 }

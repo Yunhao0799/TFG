@@ -16,23 +16,18 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true">
+            android:fitsSystemWindows="true"
+            android:textAlignment="center">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize" />
+                android:layout_height="?attr/actionBarSize"
+                android:textAlignment="center"
+                app:titleCentered="true"
+                app:titleTextAppearance="?attr/textAppearanceTitleLarge"/>
 
         </com.google.android.material.appbar.AppBarLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:textSize="30sp"
-            android:text="@{viewModel.testText}"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            />
 
         <include layout="@layout/content_start" />
 
