@@ -31,7 +31,7 @@ class LoginViewModel @Inject constructor(
     }
 
 
-    fun testFun (){
+    fun login (){
 
         viewModelScope.launch(Dispatchers.Main){
             testSuspend{

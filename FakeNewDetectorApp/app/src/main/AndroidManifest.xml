@@ -13,11 +13,13 @@
         android:theme="@style/Theme.FakeNewsDetector"
         tools:targetApi="31"
         android:name="FakeNewsDetectorApplication">
+
         <activity
             android:name=".ui.view.StartActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.FakeNewsDetector">
+            android:theme="@style/Theme.FakeNewsDetector"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
