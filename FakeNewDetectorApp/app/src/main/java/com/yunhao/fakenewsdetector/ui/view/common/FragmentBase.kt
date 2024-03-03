@@ -25,4 +25,6 @@ abstract class FragmentBase<T: ViewDataBinding, U: ViewModel> : Fragment() {
     }
 
     abstract fun getLayoutId(): Int
+
+    protected abstract fun setUpListeners()
 }

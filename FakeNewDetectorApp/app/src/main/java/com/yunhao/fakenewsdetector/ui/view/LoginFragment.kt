@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.yunhao.fakenewsdetector.R
 import com.yunhao.fakenewsdetector.databinding.FragmentLoginBinding
 import com.yunhao.fakenewsdetector.ui.view.common.FragmentBase
@@ -34,10 +35,17 @@ class LoginFragment : FragmentBase<FragmentLoginBinding, ViewModelBase>() {
 //        binding.welcomeButton.setOnClickListener{
 //            viewLifecycleOwner.lifecycleScope.launch { viewModel.testFun() }
 //        }
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+    }
+
+    override fun setUpListeners() {
+        binding?.signUpButton?.setOnClickListener{
+            findNavController().navigate(R.id.action_LoginFragment_to_signUpFragment)
+        }
     }
 }

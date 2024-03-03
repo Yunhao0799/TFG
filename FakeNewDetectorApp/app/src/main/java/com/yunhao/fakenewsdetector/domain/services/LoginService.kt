@@ -8,7 +8,7 @@ import javax.inject.Inject
 class LoginService @Inject constructor() : Service(), ILoginService {
 
 
-    override fun login(username: String, password: String): Boolean {
+    override suspend fun login(username: String, password: String): Boolean {
         return true
     }
 
