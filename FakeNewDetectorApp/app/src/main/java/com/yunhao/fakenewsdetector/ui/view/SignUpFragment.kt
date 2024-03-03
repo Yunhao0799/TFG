@@ -61,7 +61,7 @@ class SignUpFragment : FragmentBase<FragmentSignUpBinding, ViewModelBase>() {
         }
 
         binding?.logInButton?.setOnClickListener{
-            findNavController().popBackStack()
+            findNavController().navigate(R.id.action_signUpFragment_to_LoginFragment)
         }
     }
 
