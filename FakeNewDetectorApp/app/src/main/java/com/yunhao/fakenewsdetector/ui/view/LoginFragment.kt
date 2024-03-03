@@ -35,6 +35,7 @@ class LoginFragment : FragmentBase<FragmentLoginBinding, ViewModelBase>() {
 //        binding.welcomeButton.setOnClickListener{
 //            viewLifecycleOwner.lifecycleScope.launch { viewModel.testFun() }
 //        }
+        setUpListeners()
 
     }
 

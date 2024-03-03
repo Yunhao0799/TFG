@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.yunhao.fakenewsdetector.R
 import com.yunhao.fakenewsdetector.databinding.FragmentSignUpBinding
@@ -58,6 +59,10 @@ class SignUpFragment : FragmentBase<FragmentSignUpBinding, ViewModelBase>() {
                 binding?.emailInput.toString(),
                 binding?.passwordInput.toString())
         }
+
+        binding?.logInButton?.setOnClickListener{
+            findNavController().popBackStack()
+        }
     }
 
     private fun showDatePickerDialog() {
@@ -68,7 +73,7 @@ class SignUpFragment : FragmentBase<FragmentSignUpBinding, ViewModelBase>() {
                 .build()
 
             datePicker!!.addOnPositiveButtonClickListener{ selection ->
-                var date = localDateFromTimestamp(selection).toString()
+                val date = localDateFromTimestamp(selection).toString()
                 this.binding!!.birthdateText.setText(date)
             }
 

@@ -39,7 +39,7 @@ class LoginViewModel @Inject constructor(
             }
 
             testSuspend {
-                welcomeText = "${loginService.login("test", "test")}"
+//                welcomeText = "${loginService.login("test", "test")}"
             }
         }
 
