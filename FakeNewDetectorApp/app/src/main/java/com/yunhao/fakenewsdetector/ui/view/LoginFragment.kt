@@ -48,5 +48,11 @@ class LoginFragment : FragmentBase<FragmentLoginBinding, ViewModelBase>() {
         binding?.signUpButton?.setOnClickListener{
             findNavController().navigate(R.id.action_LoginFragment_to_signUpFragment)
         }
+
+        binding?.logInButton?.setOnClickListener{
+            viewModel.login{
+                findNavController().navigate(R.id.action_LoginFragment_to_nav_graph_main)
+            }
+        }
     }
 }

@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_LoginFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_LoginFragment_to_nav_graph_main"
+            app:destination="@id/nav_graph_main" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -34,4 +37,15 @@
             app:popUpTo="@id/LoginFragment"
             app:popUpToInclusive="true"/>
     </fragment>
+
+    <include app:graph="@navigation/nav_graph_main" />
+    <!--    <navigation android:id="@+id/navigation"-->
+<!--        app:startDestination="@id/mainActivity">-->
+<!--        <activity-->
+<!--            android:id="@+id/mainActivity"-->
+<!--            android:name="com.yunhao.fakenewsdetector.ui.view.MainActivity"-->
+<!--            tools:layout="@layout/activity_main"-->
+<!--            android:label="MainActivity" />-->
+<!--        -->
+<!--    </navigation>-->
 </navigation>
