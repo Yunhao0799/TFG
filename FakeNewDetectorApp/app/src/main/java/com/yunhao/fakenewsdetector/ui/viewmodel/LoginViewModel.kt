@@ -31,7 +31,7 @@ class LoginViewModel @Inject constructor(
     }
 
 
-    fun login (){
+    fun login(onLogin: () -> Unit) {
 
         viewModelScope.launch(Dispatchers.Main){
             testSuspend{
@@ -41,8 +41,11 @@ class LoginViewModel @Inject constructor(
             testSuspend {
 //                welcomeText = "${loginService.login("test", "test")}"
             }
-        }
 
+            if (loginService.login("test", "test")){
+                onLogin?.invoke()
+            }
+        }
     }
 
     private suspend fun testSuspend(function: () -> Unit) {
