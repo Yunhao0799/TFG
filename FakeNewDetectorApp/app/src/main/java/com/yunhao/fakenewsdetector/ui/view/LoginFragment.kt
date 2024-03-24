@@ -3,12 +3,15 @@ package com.yunhao.fakenewsdetector.ui.view
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.yunhao.fakenewsdetector.R
 import com.yunhao.fakenewsdetector.databinding.FragmentLoginBinding
 import com.yunhao.fakenewsdetector.ui.view.common.FragmentBase
 import com.yunhao.fakenewsdetector.ui.viewmodel.LoginViewModel
+import com.yunhao.fakenewsdetector.ui.viewmodel.UserViewModel
 import com.yunhao.fakenewsdetector.ui.viewmodel.common.ViewModelBase
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -19,6 +22,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class LoginFragment : FragmentBase<FragmentLoginBinding, ViewModelBase>() {
 
     override val viewModel: LoginViewModel by viewModels()
+
+    private val userViewModel: UserViewModel by activityViewModels()
 
     override fun getLayoutId(): Int {
         return R.layout.fragment_login
@@ -35,6 +40,7 @@ class LoginFragment : FragmentBase<FragmentLoginBinding, ViewModelBase>() {
 //        binding.welcomeButton.setOnClickListener{
 //            viewLifecycleOwner.lifecycleScope.launch { viewModel.testFun() }
 //        }
+
         setUpListeners()
 
     }
@@ -47,6 +53,20 @@ class LoginFragment : FragmentBase<FragmentLoginBinding, ViewModelBase>() {
     override fun setUpListeners() {
         binding?.signUpButton?.setOnClickListener{
             findNavController().navigate(R.id.action_LoginFragment_to_signUpFragment)
+        }
+
+        binding?.logInButton?.setOnClickListener{
+            login(binding?.emailInput.toString(), binding?.passwordInput.toString())
+            userViewModel.isUserLoggedIn.value = true
+        }
+    }
+
+    private fun login(username: String?, password: String?) {
+        var result = userViewModel.login(username, password)
+        result.onSuccess {isLoggedIn ->
+            if (isLoggedIn){
+                findNavController().navigate(R.id.action_LoginFragment_to_mainFragment)
+            }
         }
     }
 }
