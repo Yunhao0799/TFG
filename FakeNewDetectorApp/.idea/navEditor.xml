@@ -19,7 +19,7 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_LoginFragment_to_mainActivity">
+                            <entry key="action_LoginFragment_to_mainFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -50,7 +50,7 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="action_WelcomeFragment_to_mainActivity">
+                            <entry key="action_WelcomeFragment_to_mainFragment">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -60,13 +60,13 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="nav_graph_main">
+                  <entry key="mainFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="327" />
-                            <option name="y" value="-257" />
+                            <option name="x" value="166" />
+                            <option name="y" value="595" />
                           </Point>
                         </option>
                       </LayoutPositions>
