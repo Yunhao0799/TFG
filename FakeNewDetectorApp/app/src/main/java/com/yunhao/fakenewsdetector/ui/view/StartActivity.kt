@@ -72,7 +72,18 @@ class StartActivity : ActivityBase<ActivityStartBinding, ViewModelBase>() {
                 R.id.WelcomeFragment -> {
                     supportActionBar?.hide() // to hide
                 }
+                else -> {
+                    supportActionBar?.show() // to show
+                }
+            }
+        }
 
+        // Decide where to show the bottom navigation component
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.WelcomeFragment -> {
+                    supportActionBar?.hide() // to hide
+                }
                 else -> {
                     supportActionBar?.show() // to show
                 }
