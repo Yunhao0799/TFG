@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/page_home"
+        android:id="@+id/homeFragment"
         android:enabled="true"
         android:title="@string/main"
         android:icon="@drawable/selector_home_icon"/>
     <item
-        android:id="@+id/page_favorites"
+        android:id="@+id/favoritesFragment"
         android:enabled="true"
         android:title="@string/favorites"
-        android:icon="@drawable/outline_star_24"/>
+        android:icon="@drawable/selector_star_icon"/>
     <item
-        android:id="@+id/page_history"
+        android:id="@+id/discoverFragment"
         android:enabled="true"
         android:title="@string/history"
-        android:icon="@drawable/outline_watch_later_24"/>
+        android:icon="@drawable/selector_watch_later_icon"/>
     <item
-        android:id="@+id/page_discover"
+        android:id="@+id/historyFragment"
         android:enabled="true"
         android:title="@string/discover"
-        android:icon="@drawable/outline_star_24"/>
+        android:icon="@drawable/selector_star_icon"/>
 </menu>

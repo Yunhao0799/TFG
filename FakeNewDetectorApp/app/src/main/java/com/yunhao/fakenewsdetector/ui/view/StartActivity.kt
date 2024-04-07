@@ -1,5 +1,6 @@
 package com.yunhao.fakenewsdetector.ui.view
 
+import android.opengl.Visibility
 import android.os.Bundle
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -7,8 +8,11 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.viewModels
 import androidx.navigation.NavController
+import androidx.navigation.ui.NavigationUI.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.yunhao.fakenewsdetector.R
 import com.yunhao.fakenewsdetector.databinding.ActivityStartBinding
 import com.yunhao.fakenewsdetector.ui.view.common.ActivityBase
@@ -40,6 +44,11 @@ class StartActivity : ActivityBase<ActivityStartBinding, ViewModelBase>() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
+        // Setup navigation bar
+        if (binding != null){
+            setupWithNavController(binding!!.bottomNavigation, navController)
+        }
+
         SetUpListeners()
     }
 
@@ -69,7 +78,11 @@ class StartActivity : ActivityBase<ActivityStartBinding, ViewModelBase>() {
     private fun SetUpListeners() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.WelcomeFragment -> {
+                R.id.WelcomeFragment,
+                R.id.homeFragment,
+                R.id.favoritesFragment,
+                R.id.historyFragment,
+                R.id.discoverFragment-> {
                     supportActionBar?.hide() // to hide
                 }
                 else -> {
@@ -81,11 +94,14 @@ class StartActivity : ActivityBase<ActivityStartBinding, ViewModelBase>() {
         // Decide where to show the bottom navigation component
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.WelcomeFragment -> {
-                    supportActionBar?.hide() // to hide
+                R.id.homeFragment,
+                R.id.favoritesFragment,
+                R.id.historyFragment,
+                R.id.discoverFragment -> {
+                    binding?.bottomNavigation?.visibility = View.VISIBLE
                 }
                 else -> {
-                    supportActionBar?.show() // to show
+                    binding?.bottomNavigation?.visibility = View.GONE
                 }
             }
         }
