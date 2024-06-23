@@ -2,6 +2,9 @@ import os
 import flask_bcrypt as bcrypt
 import binascii
 
+from users.models import CustomUser
+
+
 def hash_password(password):
     # 1. Generate salt
     salt = os.urandom(32)
@@ -13,11 +16,14 @@ def hash_password(password):
 
     return password, salt
 
-# def verify_password(user_mail, inputted_password):
-#     # 1. Retrive user's salt from the database
-#     authentication_data = database_helper.get_users_salt(email)
-#     # 2. Append salt from DB
-#     inputed_password = inputed_password + authentication_data['salt']
-#     # 3. Compare the hash generated from the inputed password with the one in
-#     #    the database
-#     return bcrypt.check_password_hash(authentication_data['password'], inputed_password)
+
+def verify_password(user, inputted_password):
+    # 1. Retrive user's salt from the database
+    salt = user.salt
+
+    # 2. Append salt from DB
+    inputted_password = inputted_password + salt
+
+    # 3. Compare the hash generated from the inputted password with the one in
+    #    the database
+    return bcrypt.check_password_hash(user.password, inputted_password)

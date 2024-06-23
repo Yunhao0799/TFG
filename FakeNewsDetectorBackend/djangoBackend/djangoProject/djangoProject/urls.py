@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, re_path, include
 from rest_framework import routers
 
-from users.views import UserView
+from users.views import UserView, LoginView
 
 router = routers.DefaultRouter()
 router.register(r'users', UserView, basename='users')
@@ -26,4 +26,5 @@ router.register(r'users', UserView, basename='users')
 urlpatterns = [
     path('admin/', admin.site.urls),
     re_path(r"^api/", include(router.urls)),
+    path('api/login/', LoginView.as_view(), name='login'),
 ]

@@ -18,9 +18,11 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         password = validated_data.get('password', None)
-        password = PasswordHelper.hash_password(password)
+        password, salt = PasswordHelper.hash_password(password)
         validated_data.update({'password': password})
+        validated_data.update({'salt': salt})
 
         result = super().create(validated_data)
+
         return result
 
