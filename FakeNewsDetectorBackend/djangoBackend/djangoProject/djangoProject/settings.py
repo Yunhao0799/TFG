@@ -139,3 +139,10 @@ AUTHENTICATION_BACKENDS = [
     'users.backends.CustomBackend',
     'django.contrib.auth.backends.ModelBackend',  # Keep the default backend for other functionality
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',  # Add this line
+    ],
+}
+
