@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, re_path, include
 from rest_framework import routers
 
-from users.views import UserView, LoginView, LogoutView
+from users.views import UserView, LoginView, LogoutView, PredictionView
 
 router = routers.DefaultRouter()
 router.register(r'users', UserView, basename='users')
@@ -28,4 +28,5 @@ urlpatterns = [
     re_path(r"^api/", include(router.urls)),
     path('api/login/', LoginView.as_view(), name='login'),
     path('api/logout/', LogoutView.as_view(), name='logout'),
+    path('api/predict/', PredictionView.as_view(), name='prediction'),
 ]

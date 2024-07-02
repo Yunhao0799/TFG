@@ -62,3 +62,18 @@ class LogoutView(APIView):
             return Response({'message': 'Logged out successfully'}, status=status.HTTP_200_OK)
         except Token.DoesNotExist:
             return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+
+class PredictionView(APIView):
+    def post(self, request, *args, **kwargs):
+        input_string = request.data.get('input_string')
+
+        # Validate input data
+        if not input_string or not isinstance(input_string, str):
+            return Response({'error': 'input_string parameter is required and must be a string'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        # Call the prediction function
+        prediction = 1.0*100
+
+        # Return the prediction result
+        return Response({'prediction': prediction}, status=status.HTTP_200_OK)
