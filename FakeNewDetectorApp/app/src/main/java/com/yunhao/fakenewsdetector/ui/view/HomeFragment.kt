@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import com.google.android.material.transition.MaterialFadeThrough
 import com.yunhao.fakenewsdetector.R
 import com.yunhao.fakenewsdetector.databinding.FragmentHomeBinding
 import com.yunhao.fakenewsdetector.ui.view.common.FragmentBase
@@ -23,8 +24,14 @@ class HomeFragment : FragmentBase<FragmentHomeBinding, ViewModelBase>() {
     override fun setUpListeners() {
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        enterTransition = MaterialFadeThrough()
+        exitTransition = MaterialFadeThrough()    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         setUpListeners()
     }
 }
