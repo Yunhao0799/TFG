@@ -1,10 +1,13 @@
 package com.yunhao.fakenewsdetector.ui.view
 
 import android.os.Bundle
+import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.yunhao.fakenewsdetector.R
@@ -43,6 +46,7 @@ class LoginFragment : FragmentBase<FragmentLoginBinding, ViewModelBase>() {
 
         setUpListeners()
 
+        setUpObservers()
     }
 
     override fun onDestroyView() {
@@ -56,17 +60,81 @@ class LoginFragment : FragmentBase<FragmentLoginBinding, ViewModelBase>() {
         }
 
         binding?.logInButton?.setOnClickListener{
-            login(binding?.emailInput.toString(), binding?.passwordInput.toString())
+            if (!canLogIn()){
+                return@setOnClickListener
+            }
+
+            login(binding?.emailInputText?.text.toString(), binding?.passwordInputText?.text.toString())
             userViewModel.isUserLoggedIn.value = true
+        }
+
+        binding?.emailInputText?.addTextChangedListener{
+            val email = binding?.emailInputText?.text.toString()
+            if (email != "") {
+                if (!isValidEmail(email)) {
+                    binding?.emailInput?.error = getString(R.string.invalid_email)
+                } else {
+                    binding?.emailInput?.error = null
+                }
+            }
+            else {
+                binding?.emailInput?.error = null
+            }
+
+            canLogIn()
+        }
+
+        binding?.passwordInputText?.addTextChangedListener{
+            val password = binding?.passwordInputText?.text.toString()
+            if (password == "") {
+                binding?.passwordInput?.error = getString(R.string.invalid_pass)
+            } else {
+                binding?.passwordInput?.error = null
+            }
+
+            canLogIn()
         }
     }
 
+    override fun setUpObservers(){
+        //canLogIn.observe(viewLifecycleOwner, Observer {
+            //binding?.logInButton?.isEnabled = it
+        //})
+    }
+
     private fun login(username: String?, password: String?) {
-        var result = userViewModel.login(username, password)
-        result.onSuccess {isLoggedIn ->
-            if (isLoggedIn){
+        viewModel.login(username ?: "", password ?: "" ){success ->
+            if (success){
+                userViewModel.isUserLoggedIn.value = true
                 findNavController().navigate(R.id.action_LoginFragment_to_mainFragment)
+                clearAuthenticationError()
             }
+            else{
+                showAuthenticationError()
+            }
+
         }
     }
+
+    private fun isValidEmail(email: String): Boolean{
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    private fun showAuthenticationError(){
+        binding?.emailInput?.error = " "
+        binding?.passwordInput?.error =  getString(R.string.authentication_error)
+        canLogIn()
+    }
+
+    private fun clearAuthenticationError(){
+        binding?.emailInput?.error = null
+        binding?.passwordInput?.error = null
+        canLogIn()
+    }
+
+    private fun canLogIn() : Boolean{
+        return binding?.emailInput?.error == null &&
+                         binding?.passwordInput?.error == null
+    }
+
 }

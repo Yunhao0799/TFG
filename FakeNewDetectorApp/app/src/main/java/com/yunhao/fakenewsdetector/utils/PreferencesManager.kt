@@ -7,7 +7,10 @@ import androidx.preference.PreferenceManager
 class PreferencesManager {
 
     enum class Properties {
-        CSRF_TOKEN
+        CSRF_TOKEN,
+        TOKEN,
+        IS_FIRST_TIME,
+        IS_LOGGED_IN
     }
 
     var preferences: SharedPreferences? = null

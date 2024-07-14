@@ -37,6 +37,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
     dataBinding{
         enable = true
@@ -91,6 +92,9 @@ dependencies {
 
     // Preference manager
     implementation("androidx.preference:preference-ktx:1.2.1")
+
+    // Logger library
+    implementation("com.jakewharton.timber:timber:5.0.1")
 }
 
 // Allow references to generated code

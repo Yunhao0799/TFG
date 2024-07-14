@@ -3,6 +3,7 @@ package com.yunhao.fakenewsdetector.ui.viewmodel
 import androidx.databinding.Bindable
 import com.yunhao.fakenewsdetector.ui.viewmodel.common.ViewModelBase
 import androidx.databinding.library.baseAdapters.BR
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.yunhao.fakenewsdetector.domain.services.LoginService
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,8 +16,6 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val loginService: LoginService
 ) : ViewModelBase() {
-//class LoginViewModel() : ViewModelBase() {
-
     var welcomeText: String = ""
         @Bindable get
         set(value){
@@ -31,27 +30,13 @@ class LoginViewModel @Inject constructor(
     }
 
 
-    fun login(onLogin: () -> Unit) {
+    fun login(username :String,
+              password :String,
+              onLogin: (Boolean) -> Unit) {
 
         viewModelScope.launch(Dispatchers.Main){
-            testSuspend{
-                welcomeText = "callback of suspend func called"
-            }
-
-            testSuspend {
-//                welcomeText = "${loginService.login("test", "test")}"
-            }
-
-            if (loginService.login("test", "test")){
-                onLogin?.invoke()
-            }
+            val hasLoggedIn = loginService.login(username, password)
+            onLogin?.invoke(hasLoggedIn)
         }
     }
-
-    private suspend fun testSuspend(function: () -> Unit) {
-        delay(1000 * 2)
-
-        function.invoke()
-    }
-
 }

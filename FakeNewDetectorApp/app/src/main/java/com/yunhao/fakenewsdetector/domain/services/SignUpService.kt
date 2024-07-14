@@ -3,7 +3,7 @@ package com.yunhao.fakenewsdetector.domain.services
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import com.yunhao.fakenewsdetector.data.model.User
+import com.yunhao.fakenewsdetector.data.model.CreateUserDTO
 import com.yunhao.fakenewsdetector.data.network.ApiClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -24,9 +24,9 @@ class SignUpService @Inject constructor() : Service(), ISignUpService {
     ): Boolean {
 
         ApiClient.instance
-            .createUser(User("test", "pass"))
-            .enqueue(object : Callback<User> {
-                override fun onResponse(call: Call<User>, response: Response<User>) {
+            .createUser(CreateUserDTO("test", "pass"))
+            .enqueue(object : Callback<CreateUserDTO> {
+                override fun onResponse(call: Call<CreateUserDTO>, response: Response<CreateUserDTO>) {
                     if (response.isSuccessful) {
                         // Handle successful response
                     } else {
@@ -34,7 +34,7 @@ class SignUpService @Inject constructor() : Service(), ISignUpService {
                     }
                 }
 
-                override fun onFailure(call: Call<User>, t: Throwable) {
+                override fun onFailure(call: Call<CreateUserDTO>, t: Throwable) {
                     // Handle error
                 }
             })

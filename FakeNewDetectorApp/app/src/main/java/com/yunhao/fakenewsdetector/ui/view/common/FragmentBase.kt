@@ -1,6 +1,7 @@
 package com.yunhao.fakenewsdetector.ui.view.common
 
 import android.os.Bundle
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,4 +28,8 @@ abstract class FragmentBase<T: ViewDataBinding, U: ViewModel> : Fragment() {
     abstract fun getLayoutId(): Int
 
     protected abstract fun setUpListeners()
+
+    protected open fun setUpObservers(){
+
+    }
 }
