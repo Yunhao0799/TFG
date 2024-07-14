@@ -13,12 +13,15 @@ import androidx.activity.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.yunhao.fakenewsdetector.BuildConfig
 import com.yunhao.fakenewsdetector.R
 import com.yunhao.fakenewsdetector.databinding.ActivityStartBinding
 import com.yunhao.fakenewsdetector.ui.view.common.ActivityBase
 import com.yunhao.fakenewsdetector.ui.viewmodel.StartViewModel
 import com.yunhao.fakenewsdetector.ui.viewmodel.common.ViewModelBase
+import com.yunhao.fakenewsdetector.utils.ReleaseTree
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class StartActivity : ActivityBase<ActivityStartBinding, ViewModelBase>() {
@@ -34,6 +37,8 @@ class StartActivity : ActivityBase<ActivityStartBinding, ViewModelBase>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setUpLogger()
 
         setSupportActionBar(binding!!.toolbar)
 
@@ -51,7 +56,6 @@ class StartActivity : ActivityBase<ActivityStartBinding, ViewModelBase>() {
 
         SetUpListeners()
     }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
 //        menuInflater.inflate(R.menu.menu_main, menu)
@@ -74,6 +78,20 @@ class StartActivity : ActivityBase<ActivityStartBinding, ViewModelBase>() {
                 || super.onSupportNavigateUp()
     }
 
+    private fun setUpLogger() {
+        if (BuildConfig.DEBUG) {
+            // Plant a Timber DebugTree in debug builds
+            Timber.plant(Timber.DebugTree())
+        } else {
+            // Plant a tree for release builds
+            Timber.plant(ReleaseTree())
+        }
+
+        // When an unhandled exception happens, log it
+        Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
+            Timber.e(throwable, "Uncaught exception in thread: ${thread.name}")
+        }
+    }
 
     private fun SetUpListeners() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
