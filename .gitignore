@@ -13,3 +13,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+/FakeNewsDetectorBackend/aiModule/.idea/*
+/FakeNewsDetectorBackend/aiModule/roberta_inferrer/__pycache__/*
+/FakeNewsDetectorBackend/aiModule/__pycache__/*
