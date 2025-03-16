@@ -9,12 +9,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.yunhao.fakenewsdetector.R
 import com.yunhao.fakenewsdetector.databinding.FragmentLoginBinding
+import com.yunhao.fakenewsdetector.ui.utils.DialogsManager
 import com.yunhao.fakenewsdetector.ui.view.common.FragmentBase
 import com.yunhao.fakenewsdetector.ui.viewmodel.LoginViewModel
 import com.yunhao.fakenewsdetector.ui.viewmodel.UserViewModel
 import com.yunhao.fakenewsdetector.ui.viewmodel.common.ViewModelBase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @AndroidEntryPoint
 class LoginFragment : FragmentBase<FragmentLoginBinding, ViewModelBase>() {
@@ -23,6 +26,10 @@ class LoginFragment : FragmentBase<FragmentLoginBinding, ViewModelBase>() {
     private val userViewModel: UserViewModel by activityViewModels()
 
     override fun getLayoutId(): Int = R.layout.fragment_login
+
+    @Singleton
+    @Inject
+    lateinit var dialogsManager: DialogsManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,7 +45,8 @@ class LoginFragment : FragmentBase<FragmentLoginBinding, ViewModelBase>() {
 
     override fun setUpListeners() {
         binding?.signUpButton?.setOnClickListener {
-            findNavController().navigate(R.id.action_LoginFragment_to_signUpFragment)
+            // findNavController().navigate(R.id.action_LoginFragment_to_signUpFragment)
+            dialogsManager.showCustomDialog(requireContext(), "", "")
         }
 
         binding?.logInButton?.setOnClickListener {

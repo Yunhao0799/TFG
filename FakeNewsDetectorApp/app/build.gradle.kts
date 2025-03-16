@@ -1,8 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    kotlin("kapt")
-    id("com.google.dagger.hilt.android")
+    id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -45,6 +45,7 @@ android {
     sourceSets{
         // Add custom folders in layout to the build
         getByName("main").res.srcDirs(
+            "src/main/res/layouts/dialogs",
             "src/main/res/layouts/start",
             "src/main/res/layouts/main",
             "src/main/res/layouts",
@@ -52,6 +53,7 @@ android {
         )
 
         getByName("main").res.srcDirs(
+            "src/main/res/drawables/common",
             "src/main/res/drawables/common",
             "src/main/res/drawables/start",
             "src/main/res/drawables/main",
