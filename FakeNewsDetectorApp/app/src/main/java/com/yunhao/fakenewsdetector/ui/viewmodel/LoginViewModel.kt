@@ -15,6 +15,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -38,23 +39,31 @@ class LoginViewModel @Inject constructor(
     val email = MutableLiveData("")
     val password = MutableLiveData("")
 
+    // Flags to track if the user has interacted with the field
+    val emailTouched = MutableLiveData(false)
+    val passwordTouched = MutableLiveData(false)
+
     // LiveData for validation errors
-    val emailError: LiveData<String?> = email.map {
-        if (UserHelper.isValidEmail(it)) {
-            null
-        }
-        else {
-            context.getString(R.string.invalid_email)
-        }
+    val emailError: LiveData<String?> = email.switchMap {
+        MutableLiveData(
+            if (it.isNotEmpty() && !UserHelper.isValidEmail(it)) {
+                context.getString(R.string.invalid_email)
+            }
+            else {
+                null
+            }
+        )
     }
 
-    val passwordError: LiveData<String?> = password.map {
-        if (it.length >= 6) {
-            null
-        }
-        else {
-            context.getString(R.string.invalid_pass)
-        }
+    val passwordError: LiveData<String?> = password.switchMap {
+        MutableLiveData(
+            if (it.isNotEmpty() && it.length < 8) {
+                context.getString(R.string.invalid_pass)
+            }
+            else {
+                null
+            }
+        )
     }
 
     val isLoginEnabled = MediatorLiveData<Boolean>().apply {

@@ -26,7 +26,7 @@
     <string name="sign_up">Sign Up</string>
     <string name="authentication_error">The provided email or password were incorrect</string>
     <string name="invalid_email">Incorrect email format</string>
-    <string name="invalid_pass">Password cannot be empty</string>
+    <string name="invalid_pass">Password has to be at least of length 8</string>
 
     <!-- Sign up fragment -->
     <string name="invalid_name">Name cannot be empty</string>

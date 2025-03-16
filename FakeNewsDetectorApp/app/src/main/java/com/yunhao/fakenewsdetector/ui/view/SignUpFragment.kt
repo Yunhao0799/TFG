@@ -62,10 +62,18 @@ class SignUpFragment : FragmentBase<FragmentSignUpBinding, ViewModelBase>() {
         }
 
         binding?.nameInputText?.addTextChangedListener {
+            if (false == viewModel.nameTouched.value) {
+                viewModel.nameTouched.value = true
+            }
+
             viewModel.name.value = it.toString()
         }
 
         binding?.lastNameInputText?.addTextChangedListener {
+            if (false == viewModel.lastNameTouched.value) {
+                viewModel.lastNameTouched.value = true
+            }
+
             viewModel.lastname.value = it.toString()
         }
 
@@ -88,27 +96,27 @@ class SignUpFragment : FragmentBase<FragmentSignUpBinding, ViewModelBase>() {
 
     override fun setUpObservers() {
         viewModel.nameError.observe(viewLifecycleOwner) {
-            binding?.nameInputText?.error = it
+            binding?.nameInput?.error = it
         }
 
         viewModel.lastnameError.observe(viewLifecycleOwner) {
-            binding?.lastNameInputText?.error = it
+            binding?.lastNameInput?.error = it
         }
 
         viewModel.birthdateError.observe(viewLifecycleOwner) {
-            binding?.birthdateText?.error = it
+            binding?.birthdate?.error = it
         }
 
         viewModel.emailError.observe(viewLifecycleOwner) {
-            binding?.emailInputText?.error = it
+            binding?.emailInput?.error = it
         }
 
         viewModel.passwordError.observe(viewLifecycleOwner) {
-            binding?.passwordInputText?.error = it
+            binding?.passwordInput?.error = it
         }
 
         viewModel.confirmPasswordError.observe(viewLifecycleOwner) {
-            binding?.passwordConfirmInputText?.error = it
+            binding?.passwordConfirmInput?.error = it
         }
 
         viewModel.isSignUpEnabled.observe(viewLifecycleOwner) {
