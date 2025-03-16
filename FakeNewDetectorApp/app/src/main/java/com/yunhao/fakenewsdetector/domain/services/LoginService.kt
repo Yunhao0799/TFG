@@ -18,26 +18,23 @@ class LoginService @Inject constructor() : Service(), ILoginService {
 
 
     override suspend fun login(username: String, password: String): Boolean {
+        return try {
+            val response = ApiClient.instance.login(LoginUserDTO(username, password))
 
-        return suspendCancellableCoroutine { continuation ->
-            ApiClient.instance
-                .login(LoginUserDTO(username, password))
-                .enqueue(
-                    onSuccess = {response ->
-                        Timber.d("Login successful")
-                        PreferencesManager.default[PreferencesManager.Properties.TOKEN] =  response.body()?.token ?: ""
-                        continuation.resume(true, null)
-                    },
-                    onFailure = {
-                        Timber.e("Login failed")
-                        PreferencesManager.default[PreferencesManager.Properties.TOKEN] = ""
-                        continuation.resume(false, null)
-                    }
-                )
+            if (response.isSuccessful) {
+                Timber.d("Login successful")
+                PreferencesManager.default[PreferencesManager.Properties.TOKEN] = response.body()?.token ?: ""
+                true  // Return success
+            } else {
+                Timber.e("Login failed: ${response.errorBody()?.string()}")
+                PreferencesManager.default[PreferencesManager.Properties.TOKEN] = ""
+                false // Return failure
+            }
+        } catch (e: Exception) {
+            Timber.e("Login error: ${e.message}")
+            PreferencesManager.default[PreferencesManager.Properties.TOKEN] = ""
+            false
         }
-
-
-
     }
 
     override fun onBind(intent: Intent?): IBinder? {

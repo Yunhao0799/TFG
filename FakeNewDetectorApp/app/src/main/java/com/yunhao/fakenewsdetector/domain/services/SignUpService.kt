@@ -8,6 +8,7 @@ import com.yunhao.fakenewsdetector.data.network.ApiClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import timber.log.Timber
 import javax.inject.Inject
 
 class SignUpService @Inject constructor() : Service(), ISignUpService {
@@ -22,23 +23,20 @@ class SignUpService @Inject constructor() : Service(), ISignUpService {
         email: String,
         password: String
     ): Boolean {
+        return try {
+            val response = ApiClient.instance.createUser(CreateUserDTO(name, lastname, birthdate, email, password))
 
-        ApiClient.instance
-            .createUser(CreateUserDTO("test", "pass"))
-            .enqueue(object : Callback<CreateUserDTO> {
-                override fun onResponse(call: Call<CreateUserDTO>, response: Response<CreateUserDTO>) {
-                    if (response.isSuccessful) {
-                        // Handle successful response
-                    } else {
-                        // Handle failure
-                    }
-                }
-
-                override fun onFailure(call: Call<CreateUserDTO>, t: Throwable) {
-                    // Handle error
-                }
-            })
-
-        return true
+            if (response.isSuccessful) {
+                Timber.d("Sign-up successful")
+                true  // Return success
+            } else {
+                Timber.e("Sign-up failed: ${response.errorBody()?.string()}")
+                false // Return failure
+            }
+        } catch (e: Exception) {
+            Timber.e("Sign-up error: ${e.message}")
+            false
+        }
     }
+
 }

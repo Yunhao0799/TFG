@@ -4,6 +4,7 @@ import com.yunhao.fakenewsdetector.data.model.CreateUserDTO
 import com.yunhao.fakenewsdetector.data.model.LoginResponseDTO
 import com.yunhao.fakenewsdetector.data.model.LoginUserDTO
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Body
@@ -13,8 +14,8 @@ interface ApiInterface {
     fun getCsrf() : Call<Void>
 
     @POST("api/users/")
-    fun createUser(@Body userInfo: CreateUserDTO) : Call<CreateUserDTO>
+    suspend fun createUser(@Body userInfo: CreateUserDTO) : Response<CreateUserDTO>
 
     @POST("api/login/")
-    fun login(@Body userInfo: LoginUserDTO) : Call<LoginResponseDTO>
+    suspend fun login(@Body userInfo: LoginUserDTO) : Response<LoginResponseDTO>
 }
