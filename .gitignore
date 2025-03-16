@@ -13,7 +13,8 @@
 .externalNativeBuild
 .cxx
 local.properties
-
+*/.idea/*
+/FakeNewsDetectorApp/.idea/*
 /FakeNewsDetectorBackend/aiModule/.idea/*
-/FakeNewsDetectorBackend/aiModule/roberta_inferrer/__pycache__/*
-/FakeNewsDetectorBackend/aiModule/__pycache__/*
+/FakeNewsDetectorBackend/djangoBackend/djangoProject/users/migrations/*
+/FakeNewsDetectorBackend/djangoBackend/djangoProject/users/__pycache__/*

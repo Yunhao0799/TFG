@@ -14,9 +14,10 @@ class CustomUserSerializer(serializers.ModelSerializer):
         This is to define attributes. E.g: tables, sorting
         """
         model = CustomUser
-        fields = '__all__'
+        fields = ["email", "first_name", "last_name", "birthdate", "password"]
 
     def create(self, validated_data):
+        validated_data["username"] = validated_data["email"]
         password = validated_data.get('password', None)
         password, salt = PasswordHelper.hash_password(password)
         validated_data.update({'password': password})
