@@ -45,8 +45,7 @@ class LoginFragment : FragmentBase<FragmentLoginBinding, ViewModelBase>() {
 
     override fun setUpListeners() {
         binding?.signUpButton?.setOnClickListener {
-            // findNavController().navigate(R.id.action_LoginFragment_to_signUpFragment)
-            dialogsManager.showCustomDialog(requireContext(), "", "")
+            findNavController().navigate(R.id.action_LoginFragment_to_signUpFragment)
         }
 
         binding?.logInButton?.setOnClickListener {
