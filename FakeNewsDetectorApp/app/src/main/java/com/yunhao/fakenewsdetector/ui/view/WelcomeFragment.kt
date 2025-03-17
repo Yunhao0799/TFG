@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.yunhao.fakenewsdetector.R
 import com.yunhao.fakenewsdetector.data.network.ApiClient
@@ -14,6 +15,7 @@ import com.yunhao.fakenewsdetector.databinding.FragmentWelcomeBinding
 import com.yunhao.fakenewsdetector.ui.viewmodel.UserViewModel
 import com.yunhao.fakenewsdetector.utils.PreferencesManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -44,7 +46,9 @@ class WelcomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        PreferencesManager.initializeFrom(requireContext())
+        lifecycleScope.launch {
+            PreferencesManager.initializeFrom(requireContext())
+        }
 
         // This controls if jump in the main fragment
 //        userViewModel.isUserLoggedIn.observe(viewLifecycleOwner, Observer { isLoggedIn ->

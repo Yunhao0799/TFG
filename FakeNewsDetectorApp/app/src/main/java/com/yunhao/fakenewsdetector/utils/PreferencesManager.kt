@@ -3,6 +3,8 @@ package com.yunhao.fakenewsdetector.utils
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class PreferencesManager {
 
@@ -19,30 +21,36 @@ class PreferencesManager {
         private set
 
     companion object {
-        /**
-         * You need to call initializeFrom(context:) first, or use with(context:) static method.
-         */
         val default = PreferencesManager()
         val custom = PreferencesManager()
         private const val customName = "AumenturPreferences"
 
-        fun initializeFrom(context: Context) {
-            initializeCustomFrom(context)
-            initializeDefaultFrom(context)
-        }
-
-        fun customWith(context: Context): PreferencesManager {
-            if(custom.preferences == null || custom.editor == null) {
+        /**
+         * Initializes SharedPreferences in a background thread
+         */
+        suspend fun initializeFrom(context: Context) {
+            withContext(Dispatchers.IO) {
+                initializeCustomFrom(context)
                 initializeDefaultFrom(context)
             }
-            return custom
         }
 
-        fun with(context: Context): PreferencesManager {
-            if(default.preferences == null || default.editor == null) {
-                initializeCustomFrom(context)
+        suspend fun customWith(context: Context): PreferencesManager {
+            return withContext(Dispatchers.IO) {
+                if (custom.preferences == null || custom.editor == null) {
+                    initializeCustomFrom(context)
+                }
+                custom
             }
-            return default
+        }
+
+        suspend fun with(context: Context): PreferencesManager {
+            return withContext(Dispatchers.IO) {
+                if (default.preferences == null || default.editor == null) {
+                    initializeDefaultFrom(context)
+                }
+                default
+            }
         }
 
         private fun initializeCustomFrom(context: Context) {
@@ -50,15 +58,15 @@ class PreferencesManager {
             custom.editor = custom.preferences?.edit().also { it?.apply() }
             custom.initDefaultValues()
         }
+
         private fun initializeDefaultFrom(context: Context) {
             default.preferences = PreferenceManager.getDefaultSharedPreferences(context)
             default.editor = default.preferences?.edit().also { it?.apply() }
         }
     }
 
-    inline operator fun <reified T>get(property: Properties, default: T): T {
-
-        if(!this.exists(property.name)) { return default }
+    inline operator fun <reified T> get(property: Properties, default: T): T {
+        if (!this.exists(property.name)) return default
 
         return when (default) {
             is Int -> this.preferences?.getInt(property.name, default) as T
@@ -70,8 +78,7 @@ class PreferencesManager {
         }
     }
 
-    operator fun <T>set(property: Properties, value: T) {
-
+    operator fun <T> set(property: Properties, value: T) {
         when (value) {
             is Int -> this.editor?.putInt(property.name, value)
             is Long -> this.editor?.putLong(property.name, value)
@@ -80,7 +87,6 @@ class PreferencesManager {
             is String -> this.editor?.putString(property.name, value)
             else -> return
         }
-
         this.editor?.apply()
     }
 
@@ -105,6 +111,5 @@ class PreferencesManager {
         return this
     }
 
-    private fun initDefaultValues() {
-    }
+    private fun initDefaultValues() {}
 }
