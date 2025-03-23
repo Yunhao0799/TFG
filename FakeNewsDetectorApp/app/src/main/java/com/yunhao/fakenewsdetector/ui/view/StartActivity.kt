@@ -1,6 +1,5 @@
 package com.yunhao.fakenewsdetector.ui.view
 
-import android.opengl.Visibility
 import android.os.Bundle
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -13,7 +12,6 @@ import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.yunhao.fakenewsdetector.BuildConfig
 import com.yunhao.fakenewsdetector.R
 import com.yunhao.fakenewsdetector.databinding.ActivityStartBinding
@@ -126,9 +124,9 @@ class StartActivity : ActivityBase<ActivityStartBinding, ViewModelBase>() {
 
                         post {
                             contentStartBinding.layout.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                                bottomMargin = resources.getDimensionPixelSize(
-                                    com.google.android.material.R.dimen.design_bottom_navigation_height
-                                ) + 20
+                                bottomMargin =
+                                    resources.getDimensionPixelSize(com.google.android.material.R.dimen.design_bottom_navigation_height) +
+                                    resources.getDimensionPixelSize(com.google.android.material.R.dimen.m3_bottom_nav_item_padding_bottom)
                             }
                         }
                     }
