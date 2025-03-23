@@ -16,9 +16,8 @@ object AppModule {
     @Provides
     @Singleton
     fun provideDialogsManager(
-        @ApplicationContext context: Context,
         eventAggregator: EventAggregator
     ): DialogsManager {
-        return DialogsManager(context, eventAggregator)
+        return DialogsManager(eventAggregator)
     }
 }

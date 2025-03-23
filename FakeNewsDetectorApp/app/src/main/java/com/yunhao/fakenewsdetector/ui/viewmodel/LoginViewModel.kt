@@ -2,27 +2,29 @@ package com.yunhao.fakenewsdetector.ui.viewmodel
 
 import android.content.Context
 import androidx.databinding.Bindable
-import com.yunhao.fakenewsdetector.ui.viewmodel.common.ViewModelBase
 import androidx.databinding.library.baseAdapters.BR
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import com.yunhao.fakenewsdetector.R
 import com.yunhao.fakenewsdetector.domain.services.LoginService
+import com.yunhao.fakenewsdetector.ui.utils.DialogsManager
+import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.EventAggregator
+import com.yunhao.fakenewsdetector.ui.viewmodel.common.ViewModelBase
 import com.yunhao.fakenewsdetector.utils.UserHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
-import androidx.lifecycle.map
-import androidx.lifecycle.switchMap
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginService: LoginService,
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val eventAggregator: EventAggregator
 ) : ViewModelBase() {
 
     // --- Properties ---
@@ -75,6 +77,7 @@ class LoginViewModel @Inject constructor(
     // --- Initialization ---
     init {
         welcomeText = "caracola"
+//        dialogsManager.startListening()
     }
 
 
@@ -89,5 +92,4 @@ class LoginViewModel @Inject constructor(
     private fun checkValidation() {
         isLoginEnabled.value = (emailError.value == null && passwordError.value == null)
     }
-
 }

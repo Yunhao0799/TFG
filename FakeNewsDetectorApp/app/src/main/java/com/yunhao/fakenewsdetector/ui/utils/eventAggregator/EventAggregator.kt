@@ -30,12 +30,9 @@ class EventAggregator @Inject constructor() {
         scope: CoroutineScope,
         noinline handler: (T) -> Unit
     ): Job {
-
-        Timber.e( "Subscribing to event type: ${T::class.java.simpleName}")
         return scope.launch {
             events.filterIsInstance<T>().collect{
-                Timber.e( "aaaaaaaaa")
-                handler(it) // Activate subscribers of the same class Type
+                handler(it)
             }
         }
     }
