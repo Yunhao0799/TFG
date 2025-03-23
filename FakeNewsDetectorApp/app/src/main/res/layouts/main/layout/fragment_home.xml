@@ -6,29 +6,41 @@
             type = "com.yunhao.fakenewsdetector.ui.viewmodel.HomeViewModel"/>
     </data>
 
-    <ScrollView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        tools:context=".ui.view.LoginFragment"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="20dp"
-        android:fitsSystemWindows="true">
-
-        <FrameLayout
+        android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:padding="8dp"/>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center">
+                android:orientation="horizontal"
+                android:layout_gravity="bottom"
+                android:padding="8dp">
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:minHeight="48dp"
+                    android:hint="Please type what you want to predict"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@string/hello_blank_fragment" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </FrameLayout>
-    </ScrollView>
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_menu_send"
+                    android:contentDescription="Send"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
 </layout>
