@@ -17,19 +17,19 @@ import com.yunhao.fakenewsdetector.ui.viewmodel.common.ViewModelBase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Singleton
 
 @AndroidEntryPoint
-class LoginFragment : FragmentBase<FragmentLoginBinding, ViewModelBase>() {
+class LoginFragment: FragmentBase<FragmentLoginBinding, ViewModelBase>() {
+
+    // Dependency Injection
+    @Inject
+    lateinit var dialogsManager: DialogsManager
+    // ---
 
     override val viewModel: LoginViewModel by viewModels()
     private val userViewModel: UserViewModel by activityViewModels()
 
     override fun getLayoutId(): Int = R.layout.fragment_login
-
-    @Singleton
-    @Inject
-    lateinit var dialogsManager: DialogsManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,8 +45,7 @@ class LoginFragment : FragmentBase<FragmentLoginBinding, ViewModelBase>() {
 
     override fun setUpListeners() {
         binding?.signUpButton?.setOnClickListener {
-            // findNavController().navigate(R.id.action_LoginFragment_to_signUpFragment)
-            dialogsManager.showCustomDialog(requireContext(), "", "")
+            findNavController().navigate(R.id.action_LoginFragment_to_signUpFragment)
         }
 
         binding?.logInButton?.setOnClickListener {
@@ -77,11 +76,21 @@ class LoginFragment : FragmentBase<FragmentLoginBinding, ViewModelBase>() {
     }
 
     private fun login() {
+        dialogsManager.showBusyDialog(requireContext())
+
         lifecycleScope.launch {
             viewModel.login {
                 userViewModel.isUserLoggedIn.value = it
                 if (it) {
+                    dialogsManager.hideCurrentDialog();
                     findNavController().navigate(R.id.action_LoginFragment_to_mainFragment)
+                }
+                else {
+                    dialogsManager.showCustomDialog(
+                        requireContext(),
+                        requireContext().getString(R.string.error_title),
+                        requireContext().getString(R.string.error_login)
+                    )
                 }
             }
         }

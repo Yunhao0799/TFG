@@ -17,9 +17,16 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import androidx.core.widget.addTextChangedListener
+import com.yunhao.fakenewsdetector.ui.utils.DialogsManager
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class SignUpFragment : FragmentBase<FragmentSignUpBinding, ViewModelBase>() {
+class SignUpFragment: FragmentBase<FragmentSignUpBinding, ViewModelBase>() {
+
+    // Dependency Injection
+    @Inject
+    lateinit var dialogsManager: DialogsManager
+    // ---
 
     override val viewModel: SignUpViewModel by viewModels()
 
@@ -45,13 +52,19 @@ class SignUpFragment : FragmentBase<FragmentSignUpBinding, ViewModelBase>() {
         }
 
         binding?.signUpButton?.setOnClickListener {
+            dialogsManager.showBusyDialog(requireContext())
             lifecycleScope.launch {
                 viewModel.signUp{
-                    if (it){
+                    if (it) {
+                        dialogsManager.hideCurrentDialog()
                         findNavController().navigate(R.id.action_signUpFragment_to_LoginFragment)
                     }
-                    else{
-                        // TODO: show error popup
+                    else {
+                        dialogsManager.showCustomDialog(
+                            requireContext(),
+                            requireContext().getString(R.string.error_title),
+                            requireContext().getString(R.string.error_signup)
+                        )
                     }
                 }
             }

@@ -1,5 +1,6 @@
 package com.yunhao.fakenewsdetector.data.network
 
+import android.net.TrafficStats
 import com.yunhao.fakenewsdetector.utils.PreferencesManager
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -20,7 +21,13 @@ object ApiClient {
 //            ?.let {
 //                request.addHeader("X-CSRFToken", it)
 //            }
-            chain.proceed(request.build())
+            TrafficStats.setThreadStatsTag(10000)
+            try{
+                chain.proceed(request.build())
+            }
+            finally {
+                TrafficStats.clearThreadStatsTag()
+            }
         }
 
         val okHttpClient = OkHttpClient.Builder()

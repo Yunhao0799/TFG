@@ -10,6 +10,7 @@ import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import com.yunhao.fakenewsdetector.R
 import com.yunhao.fakenewsdetector.domain.services.SignUpService
+import com.yunhao.fakenewsdetector.ui.utils.DialogsManager
 import com.yunhao.fakenewsdetector.ui.viewmodel.common.ViewModelBase
 import com.yunhao.fakenewsdetector.utils.UserHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val signUpService: SignUpService,
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
 ) : ViewModelBase() {
 
     // LiveData for fields
