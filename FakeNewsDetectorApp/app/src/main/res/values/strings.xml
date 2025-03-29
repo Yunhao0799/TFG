@@ -41,6 +41,10 @@
     <string name="error_signup">Failed signing up.\nPlease revise sign up data</string>
     <string name="ok">Ok</string>
 
+    <!--  Home fragment  -->
+    <string name="please_type_what_you_want_to_predict">Please type what you want to predict</string>
+    <string name="send">Send</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="main">Main</string>

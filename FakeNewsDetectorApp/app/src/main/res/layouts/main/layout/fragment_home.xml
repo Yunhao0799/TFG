@@ -52,7 +52,8 @@
                         android:scrollHorizontally="false"
                         android:scrollbars="vertical"
                         android:maxLines="5"
-                        android:hint="Please type what you want to predict"/>
+                        android:text="@={viewModel.messageInput}"
+                        android:hint="@string/please_type_what_you_want_to_predict"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
@@ -62,7 +63,10 @@
                     app:icon="@android:drawable/ic_menu_send"
                     style="?attr/materialIconButtonFilledStyle"
                     android:layout_gravity="bottom"
-                    android:contentDescription="Send"/>
+                    android:contentDescription="@string/send"
+                    android:enabled="@{viewModel.isSendEnabled}"
+                    android:onClick="@{() -> viewModel.onSendClicked()}"
+                    />
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>

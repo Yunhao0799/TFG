@@ -22,7 +22,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeFragment : FragmentBase<FragmentHomeBinding, ViewModelBase>() {
     override val viewModel: HomeViewModel by viewModels()
 
-    private val messages = mutableListOf<ChatMessage>()
     private lateinit var adapter: ChatAdapter
 
     override fun getLayoutId(): Int {
@@ -39,32 +38,28 @@ class HomeFragment : FragmentBase<FragmentHomeBinding, ViewModelBase>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = ChatAdapter(messages)
+        adapter = ChatAdapter()
         binding?.recyclerView?.let {
-            it.adapter = adapter
             it.layoutManager = LinearLayoutManager(requireContext())
+            it.adapter = adapter
         }
 
         setUpListeners()
+        setUpObservers()
     }
 
 
     override fun setUpListeners() {
         binding?.let { b ->
-            b.submitButton?.setOnClickListener {
-                val text = b.textInputEditText?.text.toString()
-                if (!text.isNullOrBlank()) {
-                    adapter.addMessage(ChatMessage(text, true))
-                    b.recyclerView?.scrollToPosition(messages.size-1)
-                    b.textInputEditText?.text?.clear()
-                }
 
-                // Fake a reply
-                Handler(Looper.getMainLooper()).postDelayed({
-                    adapter.addMessage(ChatMessage("Auto-reply: $text", false))
-                    b.recyclerView.scrollToPosition(messages.size - 1)
-                }, 1000)
-            }
+
+        }
+    }
+
+    override fun setUpObservers() {
+        viewModel.messages.observe(viewLifecycleOwner) { updatedMessages ->
+            adapter.submitList(updatedMessages)
+            binding?.recyclerView?.scrollToPosition(updatedMessages.size-1)
         }
     }
 }
