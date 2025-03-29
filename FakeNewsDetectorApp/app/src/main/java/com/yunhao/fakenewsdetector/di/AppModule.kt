@@ -12,12 +12,4 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
-    @Provides
-    @Singleton
-    fun provideDialogsManager(
-        eventAggregator: EventAggregator
-    ): DialogsManager {
-        return DialogsManager(eventAggregator)
-    }
 }
