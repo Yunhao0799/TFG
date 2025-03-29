@@ -25,11 +25,25 @@ abstract class FragmentBase<T: ViewDataBinding, U: ViewModel> : Fragment() {
         return binding?.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setUpObservers()
+        setUpListeners()
+        setUpSubscribers()
+    }
+
     abstract fun getLayoutId(): Int
 
-    protected abstract fun setUpListeners()
+    protected open fun setUpListeners() {
 
-    protected open fun setUpObservers(){
+    }
+
+    protected open fun setUpObservers() {
+
+    }
+
+    protected open fun setUpSubscribers() {
 
     }
 }

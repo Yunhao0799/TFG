@@ -28,12 +28,13 @@
                 android:orientation="vertical"
                 android:layout_margin="20dp">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/name_input"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Name"
-                        app:endIconMode="clear_text">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/name_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Name"
+                    app:endIconMode="clear_text"
+                    app:error="@{viewModel.nameError}">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/name_input_text"
@@ -49,7 +50,8 @@
                     android:hint="Lastname"
                     app:endIconMode="clear_text"
                     android:layout_marginTop="20dp"
-                    android:layout_below="@+id/name_input">
+                    android:layout_below="@+id/name_input"
+                    app:error="@{viewModel.lastnameError}">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/last_name_input_text"
@@ -65,7 +67,8 @@
                     android:hint="Birthdate"
                     app:endIconMode="clear_text"
                     android:layout_marginTop="20dp"
-                    android:layout_below="@id/last_name_input">
+                    android:layout_below="@id/last_name_input"
+                    app:error="@{viewModel.birthdateError}">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/birthdate_text"
@@ -83,7 +86,8 @@
                     android:hint="@string/email"
                     app:endIconMode="clear_text"
                     android:layout_marginTop="20dp"
-                    android:layout_below="@id/birthdate">
+                    android:layout_below="@id/birthdate"
+                    app:error="@{viewModel.emailError}">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/email_input_text"
@@ -99,7 +103,8 @@
                     android:hint="Password"
                     app:endIconMode="clear_text"
                     android:layout_marginTop="20dp"
-                    android:layout_below="@id/email_input">
+                    android:layout_below="@id/email_input"
+                    app:error="@{viewModel.passwordError}">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/password_input_text"
@@ -115,7 +120,8 @@
                     android:hint="Confirm Password"
                     app:endIconMode="clear_text"
                     android:layout_marginTop="20dp"
-                    android:layout_below="@id/password_input">
+                    android:layout_below="@id/password_input"
+                    app:error="@{viewModel.confirmPasswordError}">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/password_confirm_input_text"
@@ -130,7 +136,9 @@
                     android:layout_height="wrap_content"
                     android:text="@string/sign_up"
                     android:layout_marginTop="104dp"
-                    android:layout_below="@+id/password_confirm_input"/>
+                    android:layout_below="@+id/password_confirm_input"
+                    app:enabled="@{viewModel.isSignUpEnabled}"
+                    android:onClickListener="@{() -> viewModel.signUp()}"/>
 
                 <LinearLayout
                     android:id="@+id/loginTextLayout"

@@ -10,8 +10,10 @@ import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import com.yunhao.fakenewsdetector.R
 import com.yunhao.fakenewsdetector.domain.services.LoginService
-import com.yunhao.fakenewsdetector.ui.utils.DialogsManager
+import com.yunhao.fakenewsdetector.ui.utils.StringProvider
 import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.EventAggregator
+import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.events.NavigateToEvent
+import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.events.PopupEvent
 import com.yunhao.fakenewsdetector.ui.viewmodel.common.ViewModelBase
 import com.yunhao.fakenewsdetector.utils.UserHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +26,8 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val loginService: LoginService,
     @ApplicationContext private val context: Context,
-    private val eventAggregator: EventAggregator
+    private val eventAggregator: EventAggregator,
+    private val stringProvider: StringProvider
 ) : ViewModelBase() {
 
     // --- Properties ---
@@ -82,14 +85,30 @@ class LoginViewModel @Inject constructor(
 
 
     // --- Methods ---
-    fun login(onLogin: (Boolean) -> Unit) {
-        viewModelScope.launch(Dispatchers.Main){
+    fun login() {
+        viewModelScope.launch(Dispatchers.IO){
+            eventAggregator.publish(PopupEvent.ShowBusyDialog())
+
             val hasLoggedIn = loginService.login(email.value!!, password.value!!)
-            onLogin?.invoke(hasLoggedIn)
+
+            eventAggregator.publish(PopupEvent.HideCurrentDialog)
+
+            if (hasLoggedIn) {
+                eventAggregator.publish(NavigateToEvent(R.id.action_LoginFragment_to_mainFragment))
+            }
+            else {
+                eventAggregator.publish(PopupEvent.ShowCustomDialog(
+                    stringProvider.get(R.string.error_title),
+                    stringProvider.get(R.string.error_login),
+                ))
+            }
         }
     }
 
     private fun checkValidation() {
-        isLoginEnabled.value = (emailError.value == null && passwordError.value == null)
+        isLoginEnabled.value = emailError.value == null &&
+                passwordError.value == null &&
+                !email.value.isNullOrBlank() &&
+                !password.value.isNullOrBlank()
     }
 }

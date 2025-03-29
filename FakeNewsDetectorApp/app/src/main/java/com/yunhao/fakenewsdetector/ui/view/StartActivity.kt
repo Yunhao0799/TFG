@@ -1,6 +1,5 @@
 package com.yunhao.fakenewsdetector.ui.view
 
-import android.opengl.Visibility
 import android.os.Bundle
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -9,10 +8,10 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.yunhao.fakenewsdetector.BuildConfig
 import com.yunhao.fakenewsdetector.R
 import com.yunhao.fakenewsdetector.databinding.ActivityStartBinding
@@ -21,6 +20,8 @@ import com.yunhao.fakenewsdetector.ui.viewmodel.StartViewModel
 import com.yunhao.fakenewsdetector.ui.viewmodel.common.ViewModelBase
 import com.yunhao.fakenewsdetector.utils.ReleaseTree
 import dagger.hilt.android.AndroidEntryPoint
+import androidx.core.view.updateLayoutParams
+import com.yunhao.fakenewsdetector.databinding.ContentStartBinding
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -34,6 +35,7 @@ class StartActivity : ActivityBase<ActivityStartBinding, ViewModelBase>() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
+    private lateinit var contentStartBinding: ContentStartBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +54,7 @@ class StartActivity : ActivityBase<ActivityStartBinding, ViewModelBase>() {
         // Setup navigation bar
         if (binding != null){
             setupWithNavController(binding!!.bottomNavigation, navController)
+            contentStartBinding = binding!!.contentLayout
         }
 
         SetUpListeners()
@@ -116,10 +119,25 @@ class StartActivity : ActivityBase<ActivityStartBinding, ViewModelBase>() {
                 R.id.favoritesFragment,
                 R.id.historyFragment,
                 R.id.discoverFragment -> {
-                    binding?.bottomNavigation?.visibility = View.VISIBLE
+                    binding?.bottomNavigation?.apply {
+                        visibility = View.VISIBLE
+
+                        post {
+                            contentStartBinding.layout.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                                bottomMargin =
+                                    resources.getDimensionPixelSize(com.google.android.material.R.dimen.design_bottom_navigation_height) +
+                                    resources.getDimensionPixelSize(com.google.android.material.R.dimen.m3_bottom_nav_item_padding_bottom)
+                            }
+                        }
+                    }
                 }
                 else -> {
-                    binding?.bottomNavigation?.visibility = View.GONE
+                    binding?.bottomNavigation?.apply {
+                        visibility = View.GONE
+                        contentStartBinding.layout.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                            bottomMargin = 0
+                        }
+                    }
                 }
             }
         }
