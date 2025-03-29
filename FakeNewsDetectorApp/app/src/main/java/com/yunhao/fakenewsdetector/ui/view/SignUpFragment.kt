@@ -107,36 +107,6 @@ class SignUpFragment: FragmentBase<FragmentSignUpBinding, ViewModelBase>() {
         }
     }
 
-    override fun setUpObservers() {
-        viewModel.nameError.observe(viewLifecycleOwner) {
-            binding?.nameInput?.error = it
-        }
-
-        viewModel.lastnameError.observe(viewLifecycleOwner) {
-            binding?.lastNameInput?.error = it
-        }
-
-        viewModel.birthdateError.observe(viewLifecycleOwner) {
-            binding?.birthdate?.error = it
-        }
-
-        viewModel.emailError.observe(viewLifecycleOwner) {
-            binding?.emailInput?.error = it
-        }
-
-        viewModel.passwordError.observe(viewLifecycleOwner) {
-            binding?.passwordInput?.error = it
-        }
-
-        viewModel.confirmPasswordError.observe(viewLifecycleOwner) {
-            binding?.passwordConfirmInput?.error = it
-        }
-
-        viewModel.isSignUpEnabled.observe(viewLifecycleOwner) {
-            binding?.signUpButton?.isEnabled = it
-        }
-    }
-
     private fun showDatePickerDialog() {
         if (datePicker == null) {
             datePicker = MaterialDatePicker.Builder.datePicker()

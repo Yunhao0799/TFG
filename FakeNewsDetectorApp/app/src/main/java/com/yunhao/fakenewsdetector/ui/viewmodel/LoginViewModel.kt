@@ -90,6 +90,9 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun checkValidation() {
-        isLoginEnabled.value = (emailError.value == null && passwordError.value == null)
+        isLoginEnabled.value = emailError.value == null &&
+                passwordError.value == null &&
+                !email.value.isNullOrBlank() &&
+                !password.value.isNullOrBlank()
     }
 }

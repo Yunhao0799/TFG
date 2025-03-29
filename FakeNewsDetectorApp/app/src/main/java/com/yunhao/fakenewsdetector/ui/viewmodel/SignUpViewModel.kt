@@ -117,13 +117,21 @@ class SignUpViewModel @Inject constructor(
 
     private fun checkValidation() {
         isSignUpEnabled.value = listOf(
-            nameError.value,
-            lastnameError.value,
-            birthdateError.value,
-            emailError.value,
-            passwordError.value,
-            confirmPasswordError.value
-        ).all { it == null }
+                nameError.value,
+                lastnameError.value,
+                birthdateError.value,
+                emailError.value,
+                passwordError.value,
+                confirmPasswordError.value
+            ).all { it == null } and
+                listOf(
+                    name.value,
+                    lastname.value,
+                    birthdate.value,
+                    email.value,
+                    password.value,
+                    confirmPassword.value
+                    ).all { !it.isNullOrBlank()}
     }
 
     fun signUp(onSuccessCallback: (Boolean) -> Unit) {

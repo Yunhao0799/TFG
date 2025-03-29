@@ -61,20 +61,6 @@ class LoginFragment: FragmentBase<FragmentLoginBinding, ViewModelBase>() {
         }
     }
 
-    override fun setUpObservers() {
-        viewModel.emailError.observe(viewLifecycleOwner) { error ->
-            binding?.emailInput?.error = error
-        }
-
-        viewModel.passwordError.observe(viewLifecycleOwner) { error ->
-            binding?.passwordInput?.error = error
-        }
-
-        viewModel.isLoginEnabled.observe(viewLifecycleOwner) { isEnabled ->
-            binding?.logInButton?.isEnabled = isEnabled
-        }
-    }
-
     private fun login() {
         dialogsManager.showBusyDialog(requireContext())
 
