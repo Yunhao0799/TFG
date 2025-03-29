@@ -1,13 +1,12 @@
 package com.yunhao.fakenewsdetector.ui.utils.eventAggregator.events
 
-import android.content.Context
 import com.yunhao.fakenewsdetector.ui.utils.DialogButton
 
 sealed class PopupEvent : Event() {
     data class ShowCustomDialog(
         val title: String,
         val message: String,
-        val buttons: List<DialogButton>,
+        val buttons: List<DialogButton>? = null,
         val isCancellable: Boolean = true
     ) : PopupEvent()
 

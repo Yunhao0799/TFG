@@ -137,7 +137,8 @@
                     android:text="@string/sign_up"
                     android:layout_marginTop="104dp"
                     android:layout_below="@+id/password_confirm_input"
-                    app:enabled="@{viewModel.isSignUpEnabled}"/>
+                    app:enabled="@{viewModel.isSignUpEnabled}"
+                    android:onClickListener="@{() -> viewModel.signUp()}"/>
 
                 <LinearLayout
                     android:id="@+id/loginTextLayout"

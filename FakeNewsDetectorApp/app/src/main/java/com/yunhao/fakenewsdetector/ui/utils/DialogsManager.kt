@@ -12,6 +12,7 @@ import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.subscribe
 import dagger.hilt.android.scopes.ActivityScoped
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import timber.log.Timber
 import javax.inject.Inject
 
 @ActivityScoped
@@ -50,21 +51,22 @@ class DialogsManager @Inject constructor(
         activity: FragmentActivity,
         title: String,
         message: String,
-        buttons: List<DialogButton>? =
-            listOf(
-                DialogButton(
-                    DialogButtonType.POSITIVE,
-                    activity.getString(R.string.ok)
-                ) {
-                    hideCurrentDialog()
-                }
-            ),
+        buttons: List<DialogButton>?,
         isCancellable: Boolean = true
     ) {
         dialogMutex.withLock {
             if (activity.isFinishing || activity.isDestroyed) return
 
             hideCurrentDialog()
+
+            val buttons = buttons ?: listOf(
+                    DialogButton(
+                        DialogButtonType.POSITIVE,
+                        activity.getString(R.string.ok)
+                    ) {
+                        hideCurrentDialog()
+                    }
+                )
 
             currentAlertDialog = MaterialAlertDialogBuilder(activity)
                 .setTitle(title)

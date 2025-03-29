@@ -2,22 +2,23 @@ package com.yunhao.fakenewsdetector.ui.view
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.yunhao.fakenewsdetector.R
 import com.yunhao.fakenewsdetector.databinding.FragmentSignUpBinding
+import com.yunhao.fakenewsdetector.ui.utils.DialogsManager
+import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.EventAggregator
+import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.events.NavigateToEvent
+import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.subscribe
 import com.yunhao.fakenewsdetector.ui.view.common.FragmentBase
 import com.yunhao.fakenewsdetector.ui.viewmodel.SignUpViewModel
 import com.yunhao.fakenewsdetector.ui.viewmodel.common.ViewModelBase
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
-import androidx.core.widget.addTextChangedListener
-import com.yunhao.fakenewsdetector.ui.utils.DialogsManager
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -26,6 +27,9 @@ class SignUpFragment: FragmentBase<FragmentSignUpBinding, ViewModelBase>() {
     // Dependency Injection
     @Inject
     lateinit var dialogsManager: DialogsManager
+
+    @Inject
+    lateinit var eventAggregator: EventAggregator
     // ---
 
     override val viewModel: SignUpViewModel by viewModels()
@@ -39,6 +43,7 @@ class SignUpFragment: FragmentBase<FragmentSignUpBinding, ViewModelBase>() {
 
         setUpListeners()
         setUpObservers()
+        setUpSubscribers()
     }
 
     override fun onDestroyView() {
@@ -49,25 +54,6 @@ class SignUpFragment: FragmentBase<FragmentSignUpBinding, ViewModelBase>() {
     override fun setUpListeners() {
         binding?.birthdateText?.setOnClickListener {
             showDatePickerDialog()
-        }
-
-        binding?.signUpButton?.setOnClickListener {
-            dialogsManager.showBusyDialog(requireContext())
-            lifecycleScope.launch {
-                viewModel.signUp{
-                    if (it) {
-                        dialogsManager.hideCurrentDialog()
-                        findNavController().navigate(R.id.action_signUpFragment_to_LoginFragment)
-                    }
-                    else {
-                        dialogsManager.showCustomDialog(
-                            requireContext(),
-                            requireContext().getString(R.string.error_title),
-                            requireContext().getString(R.string.error_signup)
-                        )
-                    }
-                }
-            }
         }
 
         binding?.logInButton?.setOnClickListener {
@@ -104,6 +90,16 @@ class SignUpFragment: FragmentBase<FragmentSignUpBinding, ViewModelBase>() {
 
         binding?.passwordConfirmInputText?.addTextChangedListener {
             viewModel.confirmPassword.value = it.toString()
+        }
+    }
+
+    override fun setUpSubscribers() {
+        super.setUpSubscribers()
+
+        dialogsManager.subscribeToEvents(requireActivity(), viewLifecycleOwner)
+
+        eventAggregator.subscribe<NavigateToEvent>(viewLifecycleOwner) {
+            findNavController().navigate(it.resId)
         }
     }
 

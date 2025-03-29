@@ -10,6 +10,9 @@ import androidx.navigation.fragment.findNavController
 import com.yunhao.fakenewsdetector.R
 import com.yunhao.fakenewsdetector.databinding.FragmentLoginBinding
 import com.yunhao.fakenewsdetector.ui.utils.DialogsManager
+import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.EventAggregator
+import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.events.NavigateToEvent
+import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.subscribe
 import com.yunhao.fakenewsdetector.ui.view.common.FragmentBase
 import com.yunhao.fakenewsdetector.ui.viewmodel.LoginViewModel
 import com.yunhao.fakenewsdetector.ui.viewmodel.UserViewModel
@@ -24,19 +27,15 @@ class LoginFragment: FragmentBase<FragmentLoginBinding, ViewModelBase>() {
     // Dependency Injection
     @Inject
     lateinit var dialogsManager: DialogsManager
+
+    @Inject
+    lateinit var eventAggregator: EventAggregator
     // ---
 
     override val viewModel: LoginViewModel by viewModels()
     private val userViewModel: UserViewModel by activityViewModels()
 
     override fun getLayoutId(): Int = R.layout.fragment_login
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        setUpObservers()
-        setUpListeners()
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -48,37 +47,12 @@ class LoginFragment: FragmentBase<FragmentLoginBinding, ViewModelBase>() {
             findNavController().navigate(R.id.action_LoginFragment_to_signUpFragment)
         }
 
-        binding?.logInButton?.setOnClickListener {
-            login()
-        }
-
-        binding?.emailInputText?.addTextChangedListener { text ->
-            viewModel.email.value = text.toString()
-        }
-
-        binding?.passwordInputText?.addTextChangedListener { text ->
-            viewModel.password.value = text.toString()
-        }
+        dialogsManager.subscribeToEvents(requireActivity(), viewLifecycleOwner)
     }
 
-    private fun login() {
-        dialogsManager.showBusyDialog(requireContext())
-
-        lifecycleScope.launch {
-            viewModel.login {
-                userViewModel.isUserLoggedIn.value = it
-                if (it) {
-                    dialogsManager.hideCurrentDialog();
-                    findNavController().navigate(R.id.action_LoginFragment_to_mainFragment)
-                }
-                else {
-                    dialogsManager.showCustomDialog(
-                        requireContext(),
-                        requireContext().getString(R.string.error_title),
-                        requireContext().getString(R.string.error_login)
-                    )
-                }
-            }
+    override fun setUpSubscribers() {
+        eventAggregator.subscribe<NavigateToEvent>(viewLifecycleOwner) {
+            findNavController().navigate(it.resId)
         }
     }
 }

@@ -3,6 +3,7 @@ package com.yunhao.fakenewsdetector.domain.services
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import com.google.gson.Gson
 import com.yunhao.fakenewsdetector.data.model.CreateUserDTO
 import com.yunhao.fakenewsdetector.data.network.ApiClient
 import retrofit2.Call
@@ -22,20 +23,26 @@ class SignUpService @Inject constructor() : Service(), ISignUpService {
         birthdate: String,
         email: String,
         password: String
-    ): Boolean {
+    ): Pair<Boolean, String> {
         return try {
-            val response = ApiClient.instance.createUser(CreateUserDTO(name, lastname, birthdate, email, password))
+            val response = ApiClient.instance.createUser(
+                CreateUserDTO(name, lastname, birthdate, email, password)
+            )
 
             if (response.isSuccessful) {
                 Timber.d("Sign-up successful")
-                true  // Return success
+                true to ""  // Success case (no error message needed)
             } else {
-                Timber.e("Sign-up failed: ${response.errorBody()?.string()}")
-                false // Return failure
+                val errorMessage = response.errorBody()?.string() ?: "Unknown error"
+                Timber.e("Sign-up failed: $errorMessage")
+                val errorJson = Gson().fromJson(errorMessage, Map::class.java)
+                val error = (errorJson["email"] as List<*>)?.firstOrNull()?.toString() ?: ""
+                false to error
             }
         } catch (e: Exception) {
-            Timber.e("Sign-up error: ${e.message}")
-            false
+            val errorMessage = e.message ?: "Unknown error"
+            Timber.e("Sign-up error: $errorMessage")
+            false to errorMessage
         }
     }
 

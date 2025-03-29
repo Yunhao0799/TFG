@@ -11,6 +11,10 @@ import androidx.lifecycle.viewModelScope
 import com.yunhao.fakenewsdetector.R
 import com.yunhao.fakenewsdetector.domain.services.SignUpService
 import com.yunhao.fakenewsdetector.ui.utils.DialogsManager
+import com.yunhao.fakenewsdetector.ui.utils.StringProvider
+import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.EventAggregator
+import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.events.NavigateToEvent
+import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.events.PopupEvent
 import com.yunhao.fakenewsdetector.ui.viewmodel.common.ViewModelBase
 import com.yunhao.fakenewsdetector.utils.UserHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,6 +28,8 @@ import javax.inject.Inject
 class SignUpViewModel @Inject constructor(
     private val signUpService: SignUpService,
     @ApplicationContext private val context: Context,
+    private val eventAggregator: EventAggregator,
+    private val stringProvider: StringProvider
 ) : ViewModelBase() {
 
     // LiveData for fields
@@ -134,9 +140,11 @@ class SignUpViewModel @Inject constructor(
                     ).all { !it.isNullOrBlank()}
     }
 
-    fun signUp(onSuccessCallback: (Boolean) -> Unit) {
+    fun signUp() {
         if (isSignUpEnabled.value == true) {
             viewModelScope.launch(Dispatchers.IO) {
+                eventAggregator.publish(PopupEvent.ShowBusyDialog())
+
                 val result = signUpService.signUp(
                     name.value ?: "",
                     lastname.value ?: "",
@@ -145,8 +153,17 @@ class SignUpViewModel @Inject constructor(
                     password.value ?: ""
                 )
 
-                withContext(Dispatchers.Main) {
-                    onSuccessCallback(result)
+                eventAggregator.publish(PopupEvent.HideCurrentDialog)
+
+                if (result.first) {
+                    eventAggregator.publish(NavigateToEvent(R.id.action_signUpFragment_to_LoginFragment))
+                }
+                else {
+                    eventAggregator.publish(PopupEvent.ShowCustomDialog(
+                        stringProvider.get(R.string.error_title),
+                        stringProvider.get(R.string.error_signup)
+                                + "\n" + result.second
+                    ))
                 }
             }
         }
