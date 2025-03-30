@@ -52,15 +52,26 @@ class HomeFragment : FragmentBase<FragmentHomeBinding, ViewModelBase>() {
 
     override fun setUpListeners() {
         binding?.let { b ->
-
-
+            b.recyclerView.viewTreeObserver.addOnGlobalLayoutListener {
+                val lastPosition = adapter.itemCount - 1
+                b.recyclerView.postDelayed({
+                    if (lastPosition >= 0){
+                        b.recyclerView.smoothScrollToPosition(lastPosition)
+                    }
+                }, 100)
+            }
         }
     }
 
     override fun setUpObservers() {
         viewModel.messages.observe(viewLifecycleOwner) { updatedMessages ->
             adapter.submitList(updatedMessages) {
-                binding?.recyclerView?.scrollToPosition(updatedMessages.size - 1)
+                val lastPosition = updatedMessages.size - 1
+                if (lastPosition >= 0) {
+                    binding?.recyclerView?.postDelayed({
+                        binding?.recyclerView?.scrollToPosition(lastPosition)
+                    }, 100)
+                }
             }
         }
     }
