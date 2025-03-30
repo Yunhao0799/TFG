@@ -3,9 +3,9 @@ package com.yunhao.fakenewsdetector.domain.services
 import com.yunhao.fakenewsdetector.domain.model.GetNewsResult
 
 interface INewsService{
-    suspend fun getNews(query: String,
-                        language: String,
-                        country: String,
-                        category: String,
-                        endpoint: String) : GetNewsResult?
+    suspend fun getNews(query: String? = null,
+                        language: String? = null,
+                        country: String? = null,
+                        category: String? = null,
+                        endpoint: String? = null) : GetNewsResult?
 }

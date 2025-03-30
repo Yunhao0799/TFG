@@ -3,7 +3,6 @@ package com.yunhao.fakenewsdetector.domain.services
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import com.yunhao.fakenewsdetector.data.model.NewsRequestDTO
 import com.yunhao.fakenewsdetector.data.network.ApiClient
 import com.yunhao.fakenewsdetector.domain.mappers.toDomain
 import com.yunhao.fakenewsdetector.domain.model.GetNewsResult
@@ -16,14 +15,14 @@ class NewsService @Inject constructor() : Service(), INewsService {
     }
 
     override suspend fun getNews(
-        query: String,
-        language: String,
-        country: String,
-        category: String,
-        endpoint: String
+        query: String?,
+        language: String?,
+        country: String?,
+        category: String?,
+        endpoint: String?
     ): GetNewsResult? {
         return try {
-            val response = ApiClient.instance.getNews(NewsRequestDTO(endpoint="top-headlines", country = "us"))
+            val response = ApiClient.instance.getNews(query, language, country, category, endpoint)
             if (response.isSuccessful) {
                 response.body()?.toDomain()
             } else {
