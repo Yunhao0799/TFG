@@ -22,7 +22,9 @@ import com.yunhao.fakenewsdetector.utils.ReleaseTree
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.core.view.updateLayoutParams
 import com.yunhao.fakenewsdetector.databinding.ContentStartBinding
+import com.yunhao.fakenewsdetector.ui.utils.DialogsManager
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class StartActivity : ActivityBase<ActivityStartBinding, ViewModelBase>() {
@@ -32,6 +34,9 @@ class StartActivity : ActivityBase<ActivityStartBinding, ViewModelBase>() {
     override fun getLayoutId(): Int {
         return R.layout.activity_start
     }
+
+    @Inject
+    lateinit var dialogsManager: DialogsManager
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
@@ -58,6 +63,8 @@ class StartActivity : ActivityBase<ActivityStartBinding, ViewModelBase>() {
         }
 
         SetUpListeners()
+
+        dialogsManager.subscribeToEvents(this, this)
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.

@@ -46,12 +46,10 @@ class LoginFragment: FragmentBase<FragmentLoginBinding, ViewModelBase>() {
         binding?.signUpButton?.setOnClickListener {
             findNavController().navigate(R.id.action_LoginFragment_to_signUpFragment)
         }
-
-        dialogsManager.subscribeToEvents(requireActivity(), viewLifecycleOwner)
     }
 
     override fun setUpSubscribers() {
-        eventAggregator.subscribe<NavigateToEvent>(viewLifecycleOwner) {
+        eventAggregator.subscribe<NavigateToEvent>(viewLifecycleOwner, true) {
             findNavController().navigate(it.resId)
         }
     }
