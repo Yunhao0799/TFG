@@ -18,3 +18,4 @@ local.properties
 /FakeNewsDetectorBackend/aiModule/.idea/*
 /FakeNewsDetectorBackend/djangoBackend/djangoProject/users/migrations/*
 /FakeNewsDetectorBackend/djangoBackend/djangoProject/users/__pycache__/*
+*.pyc

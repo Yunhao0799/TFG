@@ -27,6 +27,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-*7jdvas9f^_7nr4_zrmu7$b^%qhquw5j2-f!pp4)w+iv_@5(s*'
 
+NEWS_API_KEY = "114c92754ce248bf84b310eeecdfb92a"
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -44,7 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
-    'users'
+    'users',
+    'newsCache'
 ]
 
 MIDDLEWARE = [

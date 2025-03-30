@@ -29,4 +29,5 @@ urlpatterns = [
     path('api/login/', LoginView.as_view(), name='login'),
     path('api/logout/', LogoutView.as_view(), name='logout'),
     path('api/predict/', PredictionView.as_view(), name='prediction'),
+    path('api/news/', include('newsCache.urls')),
 ]
