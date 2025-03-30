@@ -1,15 +1,13 @@
 package com.yunhao.fakenewsdetector.ui.view
 
-import android.os.Bundle
-import android.view.View
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.yunhao.fakenewsdetector.R
 import com.yunhao.fakenewsdetector.databinding.FragmentLoginBinding
 import com.yunhao.fakenewsdetector.ui.utils.DialogsManager
+import com.yunhao.fakenewsdetector.ui.utils.ScrollHelper.scrollFocusedViewOnKeyboardOpen
+import com.yunhao.fakenewsdetector.ui.utils.ScrollHelper.scrollIntoViewOnFocus
 import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.EventAggregator
 import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.events.NavigateToEvent
 import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.subscribe
@@ -18,7 +16,6 @@ import com.yunhao.fakenewsdetector.ui.viewmodel.LoginViewModel
 import com.yunhao.fakenewsdetector.ui.viewmodel.UserViewModel
 import com.yunhao.fakenewsdetector.ui.viewmodel.common.ViewModelBase
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -45,6 +42,10 @@ class LoginFragment: FragmentBase<FragmentLoginBinding, ViewModelBase>() {
     override fun setUpListeners() {
         binding?.signUpButton?.setOnClickListener {
             findNavController().navigate(R.id.action_LoginFragment_to_signUpFragment)
+        }
+
+        binding?.let {
+            it.scrollView.scrollFocusedViewOnKeyboardOpen(it.root)
         }
     }
 

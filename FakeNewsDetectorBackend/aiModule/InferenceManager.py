@@ -1,6 +1,6 @@
 from enum import Enum
-from roberta_inferrer.inference import RobertaInferrer
-from SingletonMeta import SingletonMeta
+from .roberta_inferrer.inference import RobertaInferrer
+from .SingletonMeta import SingletonMeta
 
 
 class Model(Enum):

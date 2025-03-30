@@ -10,6 +10,4 @@ data class CreateUserDTO(
     val birthdate: String,
     val email: String,
     val password: String,
-) {
-
-}
+)

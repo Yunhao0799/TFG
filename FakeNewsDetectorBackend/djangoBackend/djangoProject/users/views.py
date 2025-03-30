@@ -10,8 +10,11 @@ from rest_framework.viewsets import GenericViewSet
 
 from django.contrib.auth import authenticate, login, logout
 
-
 from users.serializers import CustomUserSerializer
+
+from aiModule.InferenceManager import Model
+from aiModule.InferenceManager import InferenceManager
+
 from .models import CustomUser
 
 
@@ -45,6 +48,7 @@ class LoginView(APIView):
         else:
             return Response({'status': 'error', 'message': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
+
 # class LogoutView(APIView):
 #     def post(self, request, *args, **kwargs):
 #         logout(request)
@@ -63,6 +67,7 @@ class LogoutView(APIView):
         except Token.DoesNotExist:
             return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
 
+
 class PredictionView(APIView):
     def post(self, request, *args, **kwargs):
         input_string = request.data.get('input_string')
@@ -73,7 +78,13 @@ class PredictionView(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
         # Call the prediction function
-        prediction = 1.0*100
+        prediction, real_confidence, fake_confidence = InferenceManager()[Model.ROBERTA].infer(input_string)
+
+        prediction_string = "fake" if prediction == 1 else "real"
 
         # Return the prediction result
-        return Response({'prediction': prediction}, status=status.HTTP_200_OK)
+        return Response({
+            'prediction': prediction_string,
+            'realConfidence': real_confidence * 100,
+            'fakeConfidence': fake_confidence * 100
+        }, status=status.HTTP_200_OK)
