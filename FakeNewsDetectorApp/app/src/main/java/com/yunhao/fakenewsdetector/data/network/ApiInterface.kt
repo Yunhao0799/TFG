@@ -3,6 +3,8 @@ package com.yunhao.fakenewsdetector.data.network
 import com.yunhao.fakenewsdetector.data.model.CreateUserDTO
 import com.yunhao.fakenewsdetector.data.model.LoginResponseDTO
 import com.yunhao.fakenewsdetector.data.model.LoginUserDTO
+import com.yunhao.fakenewsdetector.data.model.NewsRequestDTO
+import com.yunhao.fakenewsdetector.data.model.NewsResponseDTO
 import com.yunhao.fakenewsdetector.data.model.PredictionDTO
 import com.yunhao.fakenewsdetector.data.model.PredictionResponseDTO
 import retrofit2.Call
@@ -23,4 +25,7 @@ interface ApiInterface {
 
     @POST("api/predict/")
     suspend fun predict(@Body predictionDTO: PredictionDTO) : Response<PredictionResponseDTO>
+
+    @GET("api/news/")
+    suspend fun getNews(@Body newsRequestDTO: NewsRequestDTO): Response<NewsResponseDTO>
 }
