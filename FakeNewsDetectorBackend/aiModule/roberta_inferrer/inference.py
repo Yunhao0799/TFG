@@ -3,7 +3,7 @@ import os
 import torch
 from transformers import RobertaTokenizer, RobertaForSequenceClassification
 
-from IInferrer import IInferrer
+from ..IInferrer import IInferrer
 
 
 class RobertaInferrer(IInferrer):
@@ -23,5 +23,7 @@ class RobertaInferrer(IInferrer):
         # Get predictions (softmax probabilities and class index)
         probabilities = torch.softmax(outputs.logits, dim=-1)
         predicted_class = probabilities.argmax(dim=-1).item()
+        real_confidence = probabilities[0][0].item()
+        fake_confidence = probabilities[0][1].item()
 
-        return predicted_class, probabilities
+        return predicted_class, real_confidence, fake_confidence

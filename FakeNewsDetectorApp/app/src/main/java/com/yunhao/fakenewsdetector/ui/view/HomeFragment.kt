@@ -17,6 +17,7 @@ import com.yunhao.fakenewsdetector.ui.view.common.FragmentBase
 import com.yunhao.fakenewsdetector.ui.viewmodel.HomeViewModel
 import com.yunhao.fakenewsdetector.ui.viewmodel.common.ViewModelBase
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 
 @AndroidEntryPoint
 class HomeFragment : FragmentBase<FragmentHomeBinding, ViewModelBase>() {
@@ -58,8 +59,9 @@ class HomeFragment : FragmentBase<FragmentHomeBinding, ViewModelBase>() {
 
     override fun setUpObservers() {
         viewModel.messages.observe(viewLifecycleOwner) { updatedMessages ->
-            adapter.submitList(updatedMessages)
-            binding?.recyclerView?.scrollToPosition(updatedMessages.size-1)
+            adapter.submitList(updatedMessages) {
+                binding?.recyclerView?.scrollToPosition(updatedMessages.size - 1)
+            }
         }
     }
 }
