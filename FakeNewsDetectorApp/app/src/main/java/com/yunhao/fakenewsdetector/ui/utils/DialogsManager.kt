@@ -10,10 +10,13 @@ import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.EventAggregator
 import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.events.PopupEvent
 import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.subscribe
 import dagger.hilt.android.scopes.ActivityScoped
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.coroutines.resume
 
 @ActivityScoped
 class DialogsManager @Inject constructor(
@@ -57,7 +60,7 @@ class DialogsManager @Inject constructor(
         dialogMutex.withLock {
             if (activity.isFinishing || activity.isDestroyed) return
 
-            hideCurrentDialog()
+            currentAlertDialog?.let { dismissAndWait(it) }
 
             val buttons = buttons ?: listOf(
                     DialogButton(
@@ -93,7 +96,7 @@ class DialogsManager @Inject constructor(
         dialogMutex.withLock {
             if (activity.isFinishing || activity.isDestroyed) return
 
-            hideCurrentDialog()
+            currentAlertDialog?.let { dismissAndWait(it) }
 
             val inflater = LayoutInflater.from(activity)
             val dialogView = inflater.inflate(R.layout.busy_dialog, null)
@@ -106,16 +109,23 @@ class DialogsManager @Inject constructor(
         }
     }
 
+    suspend fun dismissAndWait(dialog: AlertDialog) = suspendCancellableCoroutine<Unit> { cont ->
+        dialog.setOnDismissListener {
+            cont.resume(Unit)
+        }
+        dialog.dismiss()
+    }
+
     fun hideCurrentDialog() {
         if (currentAlertDialog?.isShowing == true) {
-            currentAlertDialog?.dismiss()
+            currentAlertDialog?.takeIf { it.isShowing }?.dismiss()
             currentAlertDialog = null
         }
     }
 
     suspend fun hideCurrentDialogSafely() {
         dialogMutex.withLock {
-            hideCurrentDialog()
+            currentAlertDialog?.let { dismissAndWait(it) }
         }
     }
 }

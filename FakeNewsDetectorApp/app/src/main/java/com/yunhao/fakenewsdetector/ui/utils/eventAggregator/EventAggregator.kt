@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -24,10 +25,9 @@ class EventAggregator @Inject constructor() {
     )
     val events = _events.asSharedFlow()
 
-    suspend fun publish(event: Event) {
-        withContext(Dispatchers.Main){
-            _events.emit(event)
-        }
+    suspend fun publish(event: Event,
+                        useMainDispatcher: Boolean = false,) {
+        _events.emit(event)
     }
 
     inline fun <reified T : Event> eventsOf(): Flow<T> {
@@ -37,11 +37,16 @@ class EventAggregator @Inject constructor() {
 
 inline fun <reified T : Event> EventAggregator.subscribe(
     lifecycleOwner: LifecycleOwner,
+    useMainDispatcher: Boolean = false,
     noinline handler: suspend (T) -> Unit
 ) {
     lifecycleOwner.lifecycleScope.launch {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            eventsOf<T>().collect { event ->
+            var flow = eventsOf<T>()
+            if (useMainDispatcher) {
+                flow = flow.flowOn(Dispatchers.Main)
+            }
+            flow.collect { event ->
                 handler(event)
             }
         }

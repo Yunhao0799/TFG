@@ -16,6 +16,8 @@ import com.yunhao.fakenewsdetector.ui.view.common.FragmentBase
 import com.yunhao.fakenewsdetector.ui.viewmodel.SignUpViewModel
 import com.yunhao.fakenewsdetector.ui.viewmodel.common.ViewModelBase
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -96,9 +98,7 @@ class SignUpFragment: FragmentBase<FragmentSignUpBinding, ViewModelBase>() {
     override fun setUpSubscribers() {
         super.setUpSubscribers()
 
-        dialogsManager.subscribeToEvents(requireActivity(), viewLifecycleOwner)
-
-        eventAggregator.subscribe<NavigateToEvent>(viewLifecycleOwner) {
+        eventAggregator.subscribe<NavigateToEvent>(viewLifecycleOwner, true) {
             findNavController().navigate(it.resId)
         }
     }
