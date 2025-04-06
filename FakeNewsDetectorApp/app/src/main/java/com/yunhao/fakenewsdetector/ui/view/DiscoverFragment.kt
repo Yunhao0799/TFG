@@ -12,6 +12,7 @@ import com.yunhao.fakenewsdetector.ui.view.common.FragmentBase
 import com.yunhao.fakenewsdetector.ui.viewmodel.DiscoverViewModel
 import com.yunhao.fakenewsdetector.ui.viewmodel.common.ViewModelBase
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class DiscoverFragment : FragmentBase<FragmentDiscoverBinding, ViewModelBase>() {
@@ -34,7 +35,19 @@ class DiscoverFragment : FragmentBase<FragmentDiscoverBinding, ViewModelBase>() 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = NewsAdapter()
+        adapter = NewsAdapter(
+            {
+                Timber.d("Go to source")
+            },
+            {
+                Timber.d("On Like")
+            },
+            {
+                Timber.d("On prediction callback")
+                viewModel.predictNew(it)
+                Timber.d("End3")
+            }
+        )
         binding?.let { b ->
             b.recyclerView?.let {
                 it.layoutManager = LinearLayoutManager(requireContext())

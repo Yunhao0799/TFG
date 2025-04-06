@@ -1,13 +1,14 @@
 package com.yunhao.fakenewsdetector.ui.view.adapters
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
-import android.opengl.Visibility
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -18,57 +19,115 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.google.android.material.imageview.ShapeableImageView
 import com.yunhao.fakenewsdetector.R
-import com.yunhao.fakenewsdetector.data.model.NewsData
 import com.yunhao.fakenewsdetector.ui.view.adapters.data.ArticleUi
 import com.yunhao.fakenewsdetector.utils.DateTimeHelper
 import timber.log.Timber
 import java.time.Instant
 
-class NewsAdapter : ListAdapter<ArticleUi, RecyclerView.ViewHolder>(DiffCallback()) {
+class NewsAdapter (
+    private val onGoToSourceCallback: (ArticleUi) -> Unit,
+    private val onLikeCallback: (ArticleUi) -> Unit,
+    private val onPredictionCallback: (ArticleUi) -> Unit,
+) : ListAdapter<ArticleUi, RecyclerView.ViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(R.layout.item_discover_news, parent, false)
-        return NewsViewHolder(view)
+        return NewsViewHolder(view, onGoToSourceCallback, onLikeCallback, onPredictionCallback)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as NewsViewHolder)?.bind((getItem(position)))
+        val newsViewHolder = holder as NewsViewHolder
+        val article = getItem(position)
+        newsViewHolder.setUpListeners(article)
+        newsViewHolder.bind(article)
     }
 
-    class NewsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class NewsViewHolder(
+        itemView: View,
+        private val onGoToSourceCallback: (ArticleUi) -> Unit,
+        private val onLikeCallback: (ArticleUi) -> Unit,
+        private val onPredictionCallback: (ArticleUi) -> Unit
+    ) : RecyclerView.ViewHolder(itemView) {
+
+        private val imageView: ShapeableImageView?
+        private val title: TextView?
+        private val description: TextView?
+        private val datetime: TextView?
+        private val predictionResult: TextView?
+        private val favoriteButton: CheckBox?
+        private val predictionButton: Button?
+        private val goToSourceButton: Button?
+        private val predictionResultLayout: LinearLayout?
+
+        init {
+            imageView = itemView.findViewById(R.id.image)
+            title = itemView.findViewById(R.id.title)
+            description = itemView.findViewById(R.id.description)
+            datetime = itemView.findViewById(R.id.datetime)
+            predictionResult = itemView.findViewById(R.id.predictionResult)
+            favoriteButton = itemView.findViewById(R.id.favoriteButton)
+            predictionButton = itemView.findViewById(R.id.predictionButton)
+            goToSourceButton = itemView.findViewById(R.id.goToSourceButton)
+            predictionResultLayout = itemView.findViewById(R.id.predictionResultLayout)
+        }
+
         fun bind(article: ArticleUi) {
-            itemView.findViewById<TextView>(R.id.title).text = article.title
-            itemView.findViewById<TextView>(R.id.description).text = article.description
-            itemView.findViewById<TextView>(R.id.datetime).text = DateTimeHelper.getFormattedDateTime(
+            imageView?.visibility = View.VISIBLE
+
+            title?.text = article.title
+            description?.text = article.description
+            datetime?.text = DateTimeHelper.getFormattedDateTime(
                 Instant.parse(article.publishedAt).toEpochMilli(), pattern = "dd/MM/yyyy HH:mm")
 
-            val imageView = itemView.findViewById<ShapeableImageView>(R.id.image)
+            imageView?.let {
+                Glide.with(itemView.context)
+                    .load(article.urlImage)
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: com.bumptech.glide.request.target.Target<Drawable>,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            imageView?.visibility = View.GONE
+                            return false
+                        }
 
-            Glide.with(itemView.context)
-                .load(article.urlImage)
-                .listener(object : RequestListener<Drawable> {
-                    override fun onLoadFailed(
-                        e: GlideException?,
-                        model: Any?,
-                        target: com.bumptech.glide.request.target.Target<Drawable>,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        imageView.visibility = GONE
-                        return false
-                    }
+                        override fun onResourceReady(
+                            resource: Drawable,
+                            model: Any,
+                            target: Target<Drawable>?,
+                            dataSource: DataSource,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            return false
+                        }
+                    })
+                    .into(imageView)
+            }
 
-                    override fun onResourceReady(
-                        resource: Drawable,
-                        model: Any,
-                        target: Target<Drawable>?,
-                        dataSource: DataSource,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        return false
-                    }
-                })
-                .into(imageView)
+            predictionResult?.text = article.predictionResult
+            predictionButton?.isEnabled = !article.isPredicting
+            predictionButton?.visibility = if (predictionResult?.text.isNullOrBlank()) View.VISIBLE else View.INVISIBLE
+            predictionResultLayout?.visibility = if (predictionResult?.text.isNullOrBlank()) View.INVISIBLE else View.VISIBLE
+        }
+
+        fun setUpListeners(article: ArticleUi) {
+            favoriteButton?.setOnCheckedChangeListener { buttonView, isChecked ->
+                onLikeCallback(article)
+            }
+
+            goToSourceButton?.setOnClickListener {
+                onGoToSourceCallback(article)
+            }
+
+            predictionButton?.setOnClickListener {
+                predictionButton.isEnabled = false
+                article.isPredicting = true
+                onPredictionCallback(article)
+                Timber.d("EndOnClick")
+            }
         }
     }
 

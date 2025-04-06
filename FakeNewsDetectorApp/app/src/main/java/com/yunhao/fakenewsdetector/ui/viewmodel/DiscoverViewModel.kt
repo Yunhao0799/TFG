@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.yunhao.fakenewsdetector.domain.services.NewsService
+import com.yunhao.fakenewsdetector.domain.services.PredictionService
 import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.EventAggregator
 import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.events.PopupEvent
 import com.yunhao.fakenewsdetector.ui.view.adapters.data.ArticleUi
@@ -13,13 +14,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class DiscoverViewModel @Inject constructor(
     private val newsService: NewsService,
-    private val eventAggregator: EventAggregator
+    private val eventAggregator: EventAggregator,
+    private val predictionService: PredictionService,
 ) : ViewModelBase() {
 
     private val _news = MutableLiveData<List<ArticleUi>>(emptyList())
@@ -32,13 +35,53 @@ class DiscoverViewModel @Inject constructor(
             Timber.d("$result")
 
             val newArticles = result?.articles?.map {
-                ArticleUi(it.title, it.description, it.imageUrl, it.url, it.publishedAt)
+                ArticleUi(it.title, it.description, it.imageUrl, it.url, it.publishedAt, null)
             }.orEmpty()
 
             val updatedList = _news.value.orEmpty() + newArticles
             _news.postValue(updatedList)
 
             eventAggregator.publish(PopupEvent.HideCurrentDialog)
+        }
+    }
+
+    fun predictNew(articleUi: ArticleUi) {
+        viewModelScope.launch(Dispatchers.IO) {
+            // delay(10000)
+            val response = predictionService.predict(articleUi.title)
+            var predictionResult: String? = null
+            if (null != response) {
+                predictionResult = "This is probably " +
+                        if (response.isFake) {
+                            "fake with a " + String.format("%.2f", response.isFakeConfidence) + "% confidence"
+                        } else {
+                            "real with a " + String.format("%.2f", response.isRealConfidence)  + "% confidence"
+                        }
+            }
+
+            withContext(Dispatchers.Main) {
+                updateArticle(ArticleUi(
+                    articleUi.title,
+                    articleUi.description,
+                    articleUi.urlImage,
+                    articleUi.url,
+                    articleUi.publishedAt,
+                    predictionResult,
+                    false
+                ))
+            }
+        }
+    }
+
+    private fun updateArticle(updatedArticle: ArticleUi) {
+        _news.value = _news.value?.map {
+            if (it.title == updatedArticle.title &&
+                it.description == updatedArticle.description) {
+                updatedArticle
+            }
+            else {
+                it
+            }
         }
     }
 }

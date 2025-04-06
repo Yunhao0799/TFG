@@ -63,15 +63,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
                         android:gravity="start"
                         android:text="2025-12-03"/>
 
                     <LinearLayout
+                        android:id="@+id/predictionResultLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         >
 
                         <TextView
+                            android:id="@+id/predictionResult"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Prediction is "/>
@@ -81,11 +84,11 @@
                             android:layout_height="0dp"
                             android:layout_weight="1"/>
 
-                        <Button
-                            style="?attr/materialIconButtonStyle"
+                        <CheckBox
+                            android:id="@+id/favoriteButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:icon="@drawable/selector_favorite_icon"/>
+                            android:button="@drawable/selector_favorite_icon"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -93,6 +96,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
                         <Button
+                            android:id="@+id/predictionButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Check veridity"
@@ -105,6 +109,7 @@
                             android:layout_weight="1"/>
 
                         <Button
+                            android:id="@+id/goToSourceButton"
                             style="?attr/materialButtonOutlinedStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
