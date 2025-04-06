@@ -60,23 +60,14 @@ class DiscoverViewModel @Inject constructor(
             }
 
             withContext(Dispatchers.Main) {
-                updateArticle(ArticleUi(
-                    articleUi.title,
-                    articleUi.description,
-                    articleUi.urlImage,
-                    articleUi.url,
-                    articleUi.publishedAt,
-                    predictionResult,
-                    false
-                ))
+                updateArticle(articleUi.copy(predictionResult = predictionResult, isPredicting = false))
             }
         }
     }
 
     private fun updateArticle(updatedArticle: ArticleUi) {
         _news.value = _news.value?.map {
-            if (it.title == updatedArticle.title &&
-                it.description == updatedArticle.description) {
+            if (it.url == updatedArticle.url) {
                 updatedArticle
             }
             else {

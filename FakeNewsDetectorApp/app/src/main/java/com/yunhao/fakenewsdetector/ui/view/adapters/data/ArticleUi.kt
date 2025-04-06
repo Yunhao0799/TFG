@@ -8,6 +8,6 @@ data class ArticleUi(
     val urlImage: String?,
     val url: String,
     val publishedAt: String,
-    var predictionResult: String?,
-    var isPredicting: Boolean = false,
+    val predictionResult: String?,
+    val isPredicting: Boolean = false,
 )

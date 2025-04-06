@@ -1,7 +1,7 @@
 package com.yunhao.fakenewsdetector.ui.view.adapters
 
-import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,6 +41,21 @@ class NewsAdapter (
         val article = getItem(position)
         newsViewHolder.setUpListeners(article)
         newsViewHolder.bind(article)
+    }
+
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, position)
+        }
+        else {
+            val article = getItem(position)
+            val payload = payloads[0] as Bundle
+            (holder as NewsViewHolder).bindPartial(article, payload)
+        }
     }
 
     class NewsViewHolder(
@@ -107,10 +122,7 @@ class NewsAdapter (
                     .into(imageView)
             }
 
-            predictionResult?.text = article.predictionResult
-            predictionButton?.isEnabled = !article.isPredicting
-            predictionButton?.visibility = if (predictionResult?.text.isNullOrBlank()) View.VISIBLE else View.INVISIBLE
-            predictionResultLayout?.visibility = if (predictionResult?.text.isNullOrBlank()) View.INVISIBLE else View.VISIBLE
+            updatePrediction(article)
         }
 
         fun setUpListeners(article: ArticleUi) {
@@ -124,20 +136,41 @@ class NewsAdapter (
 
             predictionButton?.setOnClickListener {
                 predictionButton.isEnabled = false
-                article.isPredicting = true
-                onPredictionCallback(article)
+
+                onPredictionCallback(article.copy(isPredicting = true))
                 Timber.d("EndOnClick")
             }
+        }
+
+        fun bindPartial(article: ArticleUi, payload: Bundle) {
+            if (payload.containsKey("KEY_RESULT")) {
+                updatePrediction(article)
+            }
+        }
+
+        private fun updatePrediction(article: ArticleUi) {
+            predictionResult?.text = article.predictionResult
+            predictionButton?.isEnabled = !article.isPredicting
+            predictionButton?.visibility = if (predictionResult?.text.isNullOrBlank()) View.VISIBLE else View.INVISIBLE
+            predictionResultLayout?.visibility = if (predictionResult?.text.isNullOrBlank()) View.GONE else View.VISIBLE
         }
     }
 
     class DiffCallback : DiffUtil.ItemCallback<ArticleUi>() {
         override fun areItemsTheSame(oldItem: ArticleUi, newItem: ArticleUi): Boolean {
-            return oldItem == newItem
+            return oldItem.url == newItem.url
         }
 
         override fun areContentsTheSame(oldItem: ArticleUi, newItem: ArticleUi): Boolean {
             return oldItem == newItem
+        }
+
+        override fun getChangePayload(oldItem: ArticleUi, newItem: ArticleUi): Any? {
+            val bundle = Bundle()
+            if (oldItem.predictionResult != newItem.predictionResult) {
+                bundle.putString("KEY_RESULT", newItem.predictionResult)
+            }
+            return if (bundle.isEmpty) null else bundle
         }
     }
 }
