@@ -9,7 +9,7 @@ object DateTimeHelper {
         val formatter = DateTimeFormatter.ofPattern(pattern)
         return Instant.ofEpochMilli(timestamp)
             .atZone(timeZoneId)
-            .toLocalTime()
+            .toLocalDateTime()
             .format(formatter)
     }
 }

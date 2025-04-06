@@ -32,7 +32,7 @@ class DiscoverViewModel @Inject constructor(
             Timber.d("$result")
 
             val newArticles = result?.articles?.map {
-                ArticleUi(it.title, it.description, it.url, it.url, it.publishedAt)
+                ArticleUi(it.title, it.description, it.imageUrl, it.url, it.publishedAt)
             }.orEmpty()
 
             val updatedList = _news.value.orEmpty() + newArticles

@@ -97,6 +97,9 @@ dependencies {
 
     // Logger library
     implementation("com.jakewharton.timber:timber:5.0.1")
+
+    // Glide
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 }
 
 // Allow references to generated code
