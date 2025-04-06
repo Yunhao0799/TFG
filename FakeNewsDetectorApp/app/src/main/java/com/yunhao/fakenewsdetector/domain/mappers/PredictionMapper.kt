@@ -21,7 +21,9 @@ fun NewsResponseDTO.toDomain(): GetNewsResult {
             Article(
                 article.title,
                 article.description,
-                article.publishedAt
+                article.urlToImage,
+                article.url,
+                article.publishedAt,
             )
         )
     }

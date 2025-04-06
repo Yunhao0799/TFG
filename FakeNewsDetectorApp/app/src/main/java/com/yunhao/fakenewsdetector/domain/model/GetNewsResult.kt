@@ -7,5 +7,7 @@ data class GetNewsResult (
 data class Article (
     val title: String,
     val description: String?,
+    val urlToString: String?,
+    val url: String,
     val publishedAt: String
 )

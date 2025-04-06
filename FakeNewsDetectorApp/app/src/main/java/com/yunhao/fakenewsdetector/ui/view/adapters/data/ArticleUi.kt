@@ -1,0 +1,9 @@
+package com.yunhao.fakenewsdetector.ui.view.adapters.data
+
+data class ArticleUi(
+    val title: String,
+    val description: String?,
+    val urlImage: String?,
+    val url: String,
+    val publishedAt: String
+)
