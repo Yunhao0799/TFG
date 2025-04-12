@@ -50,13 +50,14 @@ class DiscoverFragment : FragmentBase<FragmentDiscoverBinding, ViewModelBase>() 
             }
         )
         binding?.let { b ->
-            b.recyclerView?.let {
+            b.recyclerView.let {
                 it.layoutManager = LinearLayoutManager(requireContext())
                 it.adapter = adapter
             }
         }
 
         setUpObservers()
+        setUpListeners()
         viewModel.fetchNews()
     }
 
@@ -64,6 +65,19 @@ class DiscoverFragment : FragmentBase<FragmentDiscoverBinding, ViewModelBase>() 
         super.setUpObservers()
         viewModel.news.observe(viewLifecycleOwner) {
             adapter.submitList(it)
+        }
+    }
+
+    override fun setUpListeners() {
+        super.setUpListeners()
+        binding?.let { b ->
+            b.swipeRefreshLayout.let {
+                it.setOnRefreshListener {
+                    viewModel.fetchNews {
+                        it.isRefreshing = false
+                    }
+                }
+            }
         }
     }
 }

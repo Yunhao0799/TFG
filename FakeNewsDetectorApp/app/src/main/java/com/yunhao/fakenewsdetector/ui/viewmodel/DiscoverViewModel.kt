@@ -8,11 +8,9 @@ import com.yunhao.fakenewsdetector.domain.services.PredictionService
 import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.EventAggregator
 import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.events.PopupEvent
 import com.yunhao.fakenewsdetector.ui.view.adapters.data.ArticleUi
-import com.yunhao.fakenewsdetector.ui.view.adapters.data.ChatMessage
 import com.yunhao.fakenewsdetector.ui.viewmodel.common.ViewModelBase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -28,7 +26,7 @@ class DiscoverViewModel @Inject constructor(
     private val _news = MutableLiveData<List<ArticleUi>>(emptyList())
     val news: LiveData<List<ArticleUi>> = _news
 
-    fun fetchNews() {
+    fun fetchNews(onFinishCallback: (() -> Unit)? = null) {
         viewModelScope.launch(Dispatchers.IO) {
             eventAggregator.publish(PopupEvent.ShowBusyDialog())
             val result = newsService.getNews(endpoint="top-headlines", country = "us")
@@ -38,10 +36,13 @@ class DiscoverViewModel @Inject constructor(
                 ArticleUi(it.title, it.description, it.imageUrl, it.url, it.publishedAt, null)
             }.orEmpty()
 
-            val updatedList = _news.value.orEmpty() + newArticles
-            _news.postValue(updatedList)
+            _news.postValue(newArticles)
 
             eventAggregator.publish(PopupEvent.HideCurrentDialog)
+
+            withContext(Dispatchers.Main) {
+                onFinishCallback?.invoke()
+            }
         }
     }
 
