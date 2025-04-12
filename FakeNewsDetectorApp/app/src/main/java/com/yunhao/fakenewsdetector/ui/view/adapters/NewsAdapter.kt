@@ -17,6 +17,7 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
 import com.yunhao.fakenewsdetector.R
 import com.yunhao.fakenewsdetector.ui.view.adapters.data.ArticleUi
@@ -74,6 +75,7 @@ class NewsAdapter (
         private val predictionButton: Button?
         private val goToSourceButton: Button?
         private val predictionResultLayout: LinearLayout?
+        private val materialCard: MaterialCardView?
 
         init {
             imageView = itemView.findViewById(R.id.image)
@@ -85,6 +87,7 @@ class NewsAdapter (
             predictionButton = itemView.findViewById(R.id.predictionButton)
             goToSourceButton = itemView.findViewById(R.id.goToSourceButton)
             predictionResultLayout = itemView.findViewById(R.id.predictionResultLayout)
+            materialCard = itemView.findViewById(R.id.materialCard)
         }
 
         fun bind(article: ArticleUi) {
@@ -139,6 +142,10 @@ class NewsAdapter (
 
                 onPredictionCallback(article.copy(isPredicting = true))
                 Timber.d("EndOnClick")
+            }
+
+            materialCard?.setOnClickListener {
+                onGoToSourceCallback(article)
             }
         }
 

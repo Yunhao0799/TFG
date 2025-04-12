@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.transition.MaterialFadeThrough
 import com.yunhao.fakenewsdetector.R
 import com.yunhao.fakenewsdetector.databinding.FragmentDiscoverBinding
+import com.yunhao.fakenewsdetector.ui.utils.LinkHelper.openUrl
 import com.yunhao.fakenewsdetector.ui.view.adapters.NewsAdapter
 import com.yunhao.fakenewsdetector.ui.view.common.FragmentBase
 import com.yunhao.fakenewsdetector.ui.viewmodel.DiscoverViewModel
@@ -37,7 +38,7 @@ class DiscoverFragment : FragmentBase<FragmentDiscoverBinding, ViewModelBase>() 
 
         adapter = NewsAdapter(
             {
-                Timber.d("Go to source")
+                requireContext().openUrl(it.url)
             },
             {
                 Timber.d("On Like")
