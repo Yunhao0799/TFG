@@ -9,14 +9,9 @@
         android:id="@+id/favoritesFragment"
         android:enabled="true"
         android:title="@string/favorites"
-        android:icon="@drawable/selector_star_icon"/>
+        android:icon="@drawable/selector_favorite_icon"/>
     <item
         android:id="@+id/discoverFragment"
-        android:enabled="true"
-        android:title="@string/history"
-        android:icon="@drawable/selector_watch_later_icon"/>
-    <item
-        android:id="@+id/historyFragment"
         android:enabled="true"
         android:title="@string/discover"
         android:icon="@drawable/selector_star_icon"/>

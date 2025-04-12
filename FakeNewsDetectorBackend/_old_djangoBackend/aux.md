@@ -1,4 +1,6 @@
 # Start the python django server
+cd ~/Documents/TFG/FakeNewsDetectorBackend/djangoBackend/djangoProject 
+
 python manage.py runserver 0.0.0.0:8000
 
 # After the local server is setup, use ngrok to route online traffic to the local django server

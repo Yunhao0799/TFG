@@ -59,9 +59,4 @@
         android:name="com.yunhao.fakenewsdetector.ui.view.DiscoverFragment"
         android:label="fragment_discover"
         tools:layout="@layout/fragment_discover" />
-    <fragment
-        android:id="@+id/historyFragment"
-        android:name="com.yunhao.fakenewsdetector.ui.view.HistoryFragment"
-        android:label="fragment_history"
-        tools:layout="@layout/fragment_history" />
 </navigation>

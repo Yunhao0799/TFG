@@ -109,7 +109,6 @@ class StartActivity : ActivityBase<ActivityStartBinding, ViewModelBase>() {
                 R.id.WelcomeFragment,
                 R.id.homeFragment,
                 R.id.favoritesFragment,
-                R.id.historyFragment,
                 R.id.discoverFragment-> {
                     supportActionBar?.hide() // to hide
                 }
@@ -124,7 +123,6 @@ class StartActivity : ActivityBase<ActivityStartBinding, ViewModelBase>() {
             when (destination.id) {
                 R.id.homeFragment,
                 R.id.favoritesFragment,
-                R.id.historyFragment,
                 R.id.discoverFragment -> {
                     binding?.bottomNavigation?.apply {
                         visibility = View.VISIBLE
