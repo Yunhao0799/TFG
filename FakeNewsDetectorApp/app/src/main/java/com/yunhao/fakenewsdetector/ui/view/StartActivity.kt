@@ -1,6 +1,8 @@
 package com.yunhao.fakenewsdetector.ui.view
 
+import android.graphics.Color
 import android.os.Bundle
+import android.util.TypedValue
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -10,6 +12,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.viewModels
+import androidx.core.graphics.ColorUtils
+import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.yunhao.fakenewsdetector.BuildConfig
@@ -21,6 +25,7 @@ import com.yunhao.fakenewsdetector.ui.viewmodel.common.ViewModelBase
 import com.yunhao.fakenewsdetector.utils.ReleaseTree
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.core.view.updateLayoutParams
+import androidx.lifecycle.MutableLiveData
 import com.yunhao.fakenewsdetector.databinding.ContentStartBinding
 import com.yunhao.fakenewsdetector.ui.utils.DialogsManager
 import timber.log.Timber
@@ -41,6 +46,8 @@ class StartActivity : ActivityBase<ActivityStartBinding, ViewModelBase>() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
     private lateinit var contentStartBinding: ContentStartBinding
+
+    val isPopupOpen = MutableLiveData(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -144,6 +151,31 @@ class StartActivity : ActivityBase<ActivityStartBinding, ViewModelBase>() {
                         }
                     }
                 }
+            }
+
+            isPopupOpen.observe(this) { shouldHide ->
+                val typedValue = TypedValue()
+                theme.resolveAttribute(com.google.android.material.R.attr.colorSurfaceContainer, typedValue, true)
+                val baseColor = typedValue.data
+
+                if (shouldHide) {
+                    val mask = 0x4D000000
+
+                    window.statusBarColor = mask
+                    window.navigationBarColor = ColorUtils.compositeColors(mask, baseColor)
+                    binding?.globalDimOverlay?.visibility = View.VISIBLE
+                }
+                else {
+                    window.statusBarColor = Color.TRANSPARENT
+                    window.navigationBarColor = Color.TRANSPARENT
+
+                    if (binding?.bottomNavigation?.isVisible == true) {
+                        window.navigationBarColor = typedValue.data
+                    }
+
+                    binding?.globalDimOverlay?.visibility = View.GONE
+                }
+
             }
         }
     }

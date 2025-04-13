@@ -12,32 +12,45 @@
         android:layout_height="match_parent"
         tools:context=".ui.view.StartActivity">
 
-        <com.google.android.material.appbar.AppBarLayout
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center">
+            android:layout_height="match_parent">
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
+            <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:textAlignment="center"
-                app:titleCentered="true"
-                app:titleTextAppearance="?attr/textAppearanceTitleLarge"/>
+                android:layout_height="wrap_content"
+                android:textAlignment="center">
 
-        </com.google.android.material.appbar.AppBarLayout>
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:textAlignment="center"
+                    app:titleCentered="true"
+                    app:titleTextAppearance="?attr/textAppearanceTitleLarge"/>
 
-        <include layout="@layout/content_start"
-            android:id="@+id/content_layout"/>
+            </com.google.android.material.appbar.AppBarLayout>
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
+            <include layout="@layout/content_start"
+                android:id="@+id/content_layout"/>
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottom_navigation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:menu="@menu/bottom_navigation_menu"
+                android:layout_gravity="bottom"
+                app:labelVisibilityMode="labeled"
+                />
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <FrameLayout
+            android:id="@+id/globalDimOverlay"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:menu="@menu/bottom_navigation_menu"
-            android:layout_gravity="bottom"
-            app:labelVisibilityMode="labeled"
-            />
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:background="#4D000000"
+            android:fitsSystemWindows="false"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
