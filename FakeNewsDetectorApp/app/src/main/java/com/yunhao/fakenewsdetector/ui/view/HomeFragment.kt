@@ -108,6 +108,7 @@ class HomeFragment : FragmentBase<FragmentHomeBinding, ViewModelBase>() {
         ).apply {
             isOutsideTouchable = true
             elevation = 20f
+            // contentView =
             // setBackgroundDrawable(ContextCompat.getDrawable(requireContext(), android.R.color.transparent))
         }
 
