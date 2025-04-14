@@ -48,7 +48,11 @@
         android:id="@+id/homeFragment"
         android:name="com.yunhao.fakenewsdetector.ui.view.HomeFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_LoginFragment"
+            app:destination="@id/LoginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.yunhao.fakenewsdetector.ui.view.FavoritesFragment"

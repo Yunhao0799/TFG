@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.library.baseAdapters.BR
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.transition.MaterialFadeThrough
 import com.yunhao.fakenewsdetector.R
@@ -115,12 +116,12 @@ class HomeFragment : FragmentBase<FragmentHomeBinding, ViewModelBase>() {
         }
 
         binding.apply {
-            logoutText.setOnClickListener {
+            logoutRowBackground.setOnClickListener {
                 popupWindow.dismiss()
-            }
 
-            logoutClickableArea.setOnClickListener {
-                popupWindow.dismiss()
+                // TODO: call viewmodel to remove token from DB
+
+                findNavController().navigate(R.id.action_homeFragment_to_LoginFragment)
             }
         }
 
