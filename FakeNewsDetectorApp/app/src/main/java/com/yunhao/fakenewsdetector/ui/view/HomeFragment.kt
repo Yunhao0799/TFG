@@ -8,12 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.core.view.ViewCompat
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.library.baseAdapters.BR
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.transition.MaterialFadeThrough
 import com.yunhao.fakenewsdetector.R
 import com.yunhao.fakenewsdetector.databinding.FragmentHomeBinding
+import com.yunhao.fakenewsdetector.databinding.PopupProfileMenuBinding
 import com.yunhao.fakenewsdetector.ui.view.adapters.ChatAdapter
 import com.yunhao.fakenewsdetector.ui.view.common.FragmentBase
 import com.yunhao.fakenewsdetector.ui.viewmodel.HomeViewModel
@@ -97,24 +100,28 @@ class HomeFragment : FragmentBase<FragmentHomeBinding, ViewModelBase>() {
     }
 
     fun openProfilePopup(anchorView: View) {
-        val layoutInflater = requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val popupView = layoutInflater.inflate(R.layout.popup_profile_menu, null)
+        val binding = PopupProfileMenuBinding.inflate(LayoutInflater.from(context), null, false)
 
         val popupWindow = PopupWindow(
-            popupView,
+            binding.root,
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT,
             true
         ).apply {
             isOutsideTouchable = true
             elevation = 20f
-            // contentView =
             // setBackgroundDrawable(ContextCompat.getDrawable(requireContext(), android.R.color.transparent))
+            setOnDismissListener { isProfilePopupOpen.postValue(false) }
         }
 
+        binding.apply {
+            logoutText.setOnClickListener {
+                popupWindow.dismiss()
+            }
 
-        popupWindow.setOnDismissListener {
-            isProfilePopupOpen.postValue(false)
+            logoutClickableArea.setOnClickListener {
+                popupWindow.dismiss()
+            }
         }
 
         // Support RTL layout
