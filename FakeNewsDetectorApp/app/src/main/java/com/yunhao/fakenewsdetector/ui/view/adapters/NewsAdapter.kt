@@ -92,12 +92,6 @@ class NewsAdapter (
 
         fun bind(article: ArticleUi) {
             imageView?.visibility = View.VISIBLE
-
-            title?.text = article.title
-            description?.text = article.description
-            datetime?.text = DateTimeHelper.getFormattedDateTime(
-                Instant.parse(article.publishedAt).toEpochMilli(), pattern = "dd/MM/yyyy HH:mm")
-
             imageView?.let {
                 Glide.with(itemView.context)
                     .load(article.urlImage)
@@ -123,6 +117,26 @@ class NewsAdapter (
                         }
                     })
                     .into(imageView)
+            }
+
+            title?.apply {
+                text = article.title
+                visibility = if (article.title != null) View.VISIBLE else View.GONE
+            }
+
+            description?.apply {
+                text = article.description
+                visibility = if (article.description != null) View.VISIBLE else View.GONE
+            }
+
+            datetime?.apply {
+                val dateText = article.publishedAt?.let {
+                    DateTimeHelper.getFormattedDateTime(
+                        Instant.parse(it).toEpochMilli(), pattern = "dd/MM/yyyy HH:mm"
+                    )
+                }
+                text = dateText
+                visibility = if (dateText != null) View.VISIBLE else View.GONE
             }
 
             updatePrediction(article)
@@ -156,10 +170,19 @@ class NewsAdapter (
         }
 
         private fun updatePrediction(article: ArticleUi) {
-            predictionResult?.text = article.predictionResult
-            predictionButton?.isEnabled = !article.isPredicting
-            predictionButton?.visibility = if (predictionResult?.text.isNullOrBlank()) View.VISIBLE else View.INVISIBLE
-            predictionResultLayout?.visibility = if (predictionResult?.text.isNullOrBlank()) View.GONE else View.VISIBLE
+            val result = article.predictionResult
+
+            predictionResult?.apply {
+                text = result
+                visibility = if (!result.isNullOrBlank()) View.VISIBLE else View.GONE
+            }
+
+            predictionButton?.apply {
+                isEnabled = !article.isPredicting
+                visibility = if (result.isNullOrBlank()) View.VISIBLE else View.GONE
+            }
+
+            predictionResultLayout?.visibility = if (!result.isNullOrBlank()) View.VISIBLE else View.GONE
         }
     }
 
