@@ -16,7 +16,7 @@ fun PredictionResponseDTO.toDomain(): PredictionResult {
 
 fun NewsResponseDTO.toDomain(): GetNewsResult {
     val articles = mutableListOf<Article>()
-    for (article in data.articles) {
+    for (article in this.articles) {
         articles.add(
             Article(
                 article.title,
@@ -24,6 +24,7 @@ fun NewsResponseDTO.toDomain(): GetNewsResult {
                 article.urlToImage,
                 article.url,
                 article.publishedAt,
+                article.isFavorite,
             )
         )
     }
