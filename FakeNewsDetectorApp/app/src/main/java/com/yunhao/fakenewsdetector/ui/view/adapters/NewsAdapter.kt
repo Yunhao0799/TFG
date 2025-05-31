@@ -139,6 +139,10 @@ class NewsAdapter (
                 visibility = if (dateText != null) View.VISIBLE else View.GONE
             }
 
+            favoriteButton?.apply {
+                isChecked = article.isFavorite
+            }
+
             updatePrediction(article)
         }
 

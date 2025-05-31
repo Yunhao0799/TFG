@@ -19,6 +19,7 @@ fun NewsResponseDTO.toDomain(): GetNewsResult {
     for (article in this.articles) {
         articles.add(
             Article(
+                article.id,
                 article.title,
                 article.description,
                 article.urlToImage,

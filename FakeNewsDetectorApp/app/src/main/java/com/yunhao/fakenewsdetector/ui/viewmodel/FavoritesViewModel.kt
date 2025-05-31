@@ -33,7 +33,8 @@ class FavoritesViewModel @Inject constructor(
             Timber.d("$result")
 
             val newArticles = result?.articles?.map {
-                ArticleUi(it.title, it.description, it.imageUrl, it.url, it.publishedAt, null)
+                ArticleUi(it.id, it.title, it.description, it.imageUrl, it.url, it.publishedAt,
+                          it.isFavorite,null)
             }.orEmpty()
 
             _news.postValue(newArticles)

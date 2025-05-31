@@ -1,4 +1,6 @@
 from datetime import timedelta
+
+from django.db.models import Case, When
 from django.utils import timezone
 from .models import NewsCache, NewsArticle
 from .newsApiClient import NewsApiClient
@@ -22,7 +24,10 @@ class NewsCacheService:
         if cache:
             # Extract articles from cached data and match them in the DB
             urls = [article['url'] for article in cache.data.get("articles", [])]
-            return NewsArticle.objects.filter(url__in=urls)
+            preserved_order = Case(
+                *[When(url=url, then=pos) for pos, url in enumerate(urls)]
+            )
+            return NewsArticle.objects.filter(url__in=urls).order_by(preserved_order)
 
         # Fetch fresh data from NewsAPI
         if endpoint == "everything":

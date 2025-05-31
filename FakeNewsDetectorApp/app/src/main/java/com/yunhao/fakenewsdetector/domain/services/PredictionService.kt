@@ -11,9 +11,9 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class PredictionService @Inject constructor() : Service(), IPredictionService {
-    override suspend fun predict(string: String): PredictionResult? {
+    override suspend fun predict(string: String, articleId: Int?): PredictionResult? {
         return try {
-            val response = ApiClient.instance.predict(PredictionDTO(string))
+            val response = ApiClient.instance.predict(PredictionDTO(string, articleId))
             if (response.isSuccessful) {
                 response.body()?.toDomain()
             } else {

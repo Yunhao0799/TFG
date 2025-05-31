@@ -33,7 +33,8 @@ class DiscoverViewModel @Inject constructor(
             Timber.d("$result")
 
             val newArticles = result?.articles?.map {
-                ArticleUi(it.title, it.description, it.imageUrl, it.url, it.publishedAt, null)
+                ArticleUi(it.id, it.title, it.description, it.imageUrl, it.url,
+                    it.publishedAt, it.isFavorite, null)
             }.orEmpty()
 
             _news.postValue(newArticles)
@@ -49,7 +50,7 @@ class DiscoverViewModel @Inject constructor(
     fun predictNew(articleUi: ArticleUi) {
         viewModelScope.launch(Dispatchers.IO) {
             // delay(10000)
-            val response = predictionService.predict(articleUi.title)
+            val response = predictionService.predict(articleUi.title, articleUi.id)
             var predictionResult: String? = null
             if (null != response) {
                 predictionResult = "This is probably " +
@@ -64,6 +65,10 @@ class DiscoverViewModel @Inject constructor(
                 updateArticle(articleUi.copy(predictionResult = predictionResult, isPredicting = false))
             }
         }
+    }
+
+    fun likeArticle(articleUi: ArticleUi) {
+
     }
 
     private fun updateArticle(updatedArticle: ArticleUi) {

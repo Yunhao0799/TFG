@@ -18,7 +18,7 @@ data class Article(
     @SerializedName("published_at")
     val publishedAt: String?,
     @SerializedName("is_favorite")
-    val isFavorite: Boolean? = false,
+    val isFavorite: Boolean = false,
 )
 
 data class ArticleSource(

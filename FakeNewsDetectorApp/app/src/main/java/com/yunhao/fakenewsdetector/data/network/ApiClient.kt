@@ -18,9 +18,12 @@ object ApiClient {
             if (csrfToken != ""){
                 request.addHeader("X-CSRFToken", csrfToken)
             }
-//            ?.let {
-//                request.addHeader("X-CSRFToken", it)
-//            }
+
+            val token = PreferencesManager.default.get(PreferencesManager.Properties.TOKEN, "")
+            if (token != ""){
+                request.addHeader("Authorization", "Token $token")
+            }
+
             TrafficStats.setThreadStatsTag(10000)
             try{
                 chain.proceed(request.build())
