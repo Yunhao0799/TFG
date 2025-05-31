@@ -26,6 +26,7 @@ fun NewsResponseDTO.toDomain(): GetNewsResult {
                 article.url,
                 article.publishedAt,
                 article.isFavorite,
+                article.prediction,
             )
         )
     }

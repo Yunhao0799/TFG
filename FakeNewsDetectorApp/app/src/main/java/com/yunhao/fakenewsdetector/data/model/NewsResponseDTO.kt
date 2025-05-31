@@ -19,6 +19,7 @@ data class Article(
     val publishedAt: String?,
     @SerializedName("is_favorite")
     val isFavorite: Boolean = false,
+    val prediction: String? = null,
 )
 
 data class ArticleSource(

@@ -12,4 +12,5 @@ data class Article (
     val url: String,
     val publishedAt: String?,
     val isFavorite: Boolean = false,
+    val prediction: String? = null,
 )
