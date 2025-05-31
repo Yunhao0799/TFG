@@ -35,6 +35,7 @@ class NewsArticle(models.Model):
     description = models.TextField(blank=True, null=True)
     url = models.URLField(unique=True)  # Use URL as unique identifier
     urlToImage = models.URLField(max_length=1024, blank=True, null=True)
+    prediction = models.URLField(max_length=100, blank=True, null=True)
     source_name = models.CharField(max_length=255)
     published_at = models.DateTimeField()
     query = models.CharField(max_length=100, blank=True, null=True)
