@@ -42,7 +42,7 @@ class DiscoverFragment : FragmentBase<FragmentDiscoverBinding, ViewModelBase>() 
             },
             {
                 Timber.d("On Like")
-                viewModel.likeArticle(it)
+                viewModel.toggleFavorite(it)
             },
             {
                 Timber.d("On prediction callback")

@@ -80,8 +80,10 @@ class DiscoverViewModel @Inject constructor(
         }
     }
 
-    fun likeArticle(articleUi: ArticleUi) {
-
+    fun toggleFavorite(articleUi: ArticleUi) {
+        viewModelScope.launch(Dispatchers.IO) {
+            newsService.toggleFavorite(articleUi.id)
+        }
     }
 
     private fun updateArticle(updatedArticle: ArticleUi) {

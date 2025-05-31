@@ -1,6 +1,8 @@
 package com.yunhao.fakenewsdetector.data.network
 
 import com.yunhao.fakenewsdetector.data.model.CreateUserDTO
+import com.yunhao.fakenewsdetector.data.model.FavoriteToggleDTO
+import com.yunhao.fakenewsdetector.data.model.FavoriteToggleResponseDTO
 import com.yunhao.fakenewsdetector.data.model.LoginResponseDTO
 import com.yunhao.fakenewsdetector.data.model.LoginUserDTO
 import com.yunhao.fakenewsdetector.data.model.NewsResponseDTO
@@ -32,4 +34,7 @@ interface ApiInterface {
                         @Query("country") country: String? = null,
                         @Query("category") category: String? = null,
                         @Query("endpoint") endpoint: String? = null) : Response<NewsResponseDTO>
+
+    @POST("api/news/favorite-toggle/")
+    suspend fun toggleFavorite(@Body request: FavoriteToggleDTO): Response<FavoriteToggleResponseDTO>
 }
