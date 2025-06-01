@@ -3,7 +3,8 @@ package com.yunhao.fakenewsdetector.data.model
 import com.google.gson.annotations.SerializedName
 
 data class NewsResponseDTO(
-    val articles: List<Article>
+    val articles: List<Article>?,
+    val favorites: List<Article>?,
 )
 
 data class Article(

@@ -3,6 +3,9 @@ package com.yunhao.fakenewsdetector.ui.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.yunhao.fakenewsdetector.data.model.PredictionResponseDTO
+import com.yunhao.fakenewsdetector.domain.mappers.toDomain
 import com.yunhao.fakenewsdetector.domain.services.NewsService
 import com.yunhao.fakenewsdetector.domain.services.PredictionService
 import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.EventAggregator
@@ -29,12 +32,26 @@ class FavoritesViewModel @Inject constructor(
     fun fetchNews(onFinishCallback: (() -> Unit)? = null) {
         viewModelScope.launch(Dispatchers.IO) {
             eventAggregator.publish(PopupEvent.ShowBusyDialog())
-            val result = newsService.getNews(endpoint="top-headlines", country = "us")
+            val result = newsService.getFavorites()
             Timber.d("$result")
 
-            val newArticles = result?.articles?.map {
-                ArticleUi(it.id, it.title, it.description, it.imageUrl, it.url, it.publishedAt,
-                          it.isFavorite,null)
+            val gson = Gson()
+            val newArticles = result?.articles?.map { article ->
+                val prediction = article.prediction?.let {
+                    val dto = gson.fromJson(it, PredictionResponseDTO::class.java)
+                    predictionService.predictionToString(dto.toDomain())
+                }
+
+                ArticleUi(
+                    id = article.id,
+                    title = article.title,
+                    description = article.description,
+                    urlImage = article.imageUrl,
+                    url = article.url,
+                    publishedAt = article.publishedAt,
+                    isFavorite = article.isFavorite,
+                    predictionResult = prediction
+                )
             }.orEmpty()
 
             _news.postValue(newArticles)
@@ -47,23 +64,9 @@ class FavoritesViewModel @Inject constructor(
         }
     }
 
-    fun predictNew(articleUi: ArticleUi) {
+    fun toggleFavorite(articleUi: ArticleUi) {
         viewModelScope.launch(Dispatchers.IO) {
-            // delay(10000)
-            val response = predictionService.predict(articleUi.title)
-            var predictionResult: String? = null
-            if (null != response) {
-                predictionResult = "This is probably " +
-                        if (response.isFake) {
-                            "fake with a " + String.format("%.2f", response.isFakeConfidence) + "% confidence"
-                        } else {
-                            "real with a " + String.format("%.2f", response.isRealConfidence)  + "% confidence"
-                        }
-            }
-
-            withContext(Dispatchers.Main) {
-                updateArticle(articleUi.copy(predictionResult = predictionResult, isPredicting = false))
-            }
+            newsService.toggleFavorite(articleUi.id, articleUi.isFavorite)
         }
     }
 

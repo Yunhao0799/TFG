@@ -30,20 +30,23 @@ class NewsView(APIView):
 def toggle_favorite(request):
     print(request.data)
     article_id = request.data.get('article_id')
-    if not article_id:
-        return Response({'error': 'Missing article_id'}, status=status.HTTP_400_BAD_REQUEST)
+    favorite = request.data.get('favorite')
+    if not article_id or favorite is None:
+        return Response({'error': 'Missing article_id or toggle status'}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
         article = NewsArticle.objects.get(id=article_id)
     except NewsArticle.DoesNotExist:
         return Response({'error': 'Article not found'}, status=status.HTTP_404_NOT_FOUND)
 
-    favorite, created = FavoriteNews.objects.get_or_create(user=request.user, article=article)
-    if not created:
-        favorite.delete()
+    is_favorite = str(favorite).lower() == "true"
+    if is_favorite:
+        FavoriteNews.objects.get_or_create(user=request.user, article=article)
+        return Response({'status': 'added'})
+    else:
+        FavoriteNews.objects.filter(user=request.user, article=article).delete()
         return Response({'status': 'removed'})
 
-    return Response({'status': 'added'})
 
 
 @api_view(['GET'])

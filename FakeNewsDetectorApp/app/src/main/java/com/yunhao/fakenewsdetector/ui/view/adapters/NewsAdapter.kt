@@ -148,7 +148,7 @@ class NewsAdapter (
 
         fun setUpListeners(article: ArticleUi) {
             favoriteButton?.setOnCheckedChangeListener { buttonView, isChecked ->
-                onLikeCallback(article)
+                onLikeCallback(article.copy(isFavorite = isChecked))
             }
 
             goToSourceButton?.setOnClickListener {

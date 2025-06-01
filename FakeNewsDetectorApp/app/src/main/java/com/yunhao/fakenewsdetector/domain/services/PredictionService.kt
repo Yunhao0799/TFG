@@ -27,6 +27,15 @@ class PredictionService @Inject constructor() : Service(), IPredictionService {
         }
     }
 
+    override fun predictionToString(response: PredictionResult): String {
+        return "This is probably " +
+                if (response.isFake) {
+                    "fake with a " + String.format("%.2f", response.isFakeConfidence) + "% confidence"
+                } else {
+                    "real with a " + String.format("%.2f", response.isRealConfidence)  + "% confidence"
+                }
+    }
+
     override fun onBind(intent: Intent?): IBinder? {
         TODO("Not yet implemented")
     }

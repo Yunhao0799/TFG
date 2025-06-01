@@ -9,5 +9,7 @@ interface INewsService{
                         category: String? = null,
                         endpoint: String? = null) : GetNewsResult?
 
-    suspend fun toggleFavorite(articleId: Int) : Boolean
+    suspend fun getFavorites() : GetNewsResult?
+
+    suspend fun toggleFavorite(articleId: Int, isFavorite: Boolean) : Boolean
 }

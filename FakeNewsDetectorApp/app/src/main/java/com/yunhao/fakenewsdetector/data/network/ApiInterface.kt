@@ -35,6 +35,9 @@ interface ApiInterface {
                         @Query("category") category: String? = null,
                         @Query("endpoint") endpoint: String? = null) : Response<NewsResponseDTO>
 
+    @GET("api/news/favorites")
+    suspend fun getFavorites() : Response<NewsResponseDTO>
+
     @POST("api/news/favorite-toggle/")
     suspend fun toggleFavorite(@Body request: FavoriteToggleDTO): Response<FavoriteToggleResponseDTO>
 }

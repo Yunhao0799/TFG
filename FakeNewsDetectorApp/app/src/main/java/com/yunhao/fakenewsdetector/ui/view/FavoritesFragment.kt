@@ -42,11 +42,12 @@ class FavoritesFragment : FragmentBase<FragmentFavoritesBinding, ViewModelBase>(
             },
             {
                 Timber.d("On Like")
+                viewModel.toggleFavorite(it)
             },
             {
-                Timber.d("On prediction callback")
-                viewModel.predictNew(it)
-                Timber.d("End3")
+//                Timber.d("On prediction callback")
+//                viewModel.predictNew(it)
+//                Timber.d("End3")
             }
         )
         binding?.let { b ->

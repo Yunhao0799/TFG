@@ -4,5 +4,6 @@ import com.google.gson.annotations.SerializedName
 
 data class FavoriteToggleDTO(
     @SerializedName("article_id")
-    val articleId: Int
+    val articleId: Int,
+    val favorite: Boolean
 )

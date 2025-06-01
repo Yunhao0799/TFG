@@ -40,7 +40,7 @@ class DiscoverViewModel @Inject constructor(
             val newArticles = result?.articles?.map { article ->
                 val prediction = article.prediction?.let {
                     val dto = gson.fromJson(it, PredictionResponseDTO::class.java)
-                    predictionToString(dto.toDomain())
+                    predictionService.predictionToString(dto.toDomain())
                 }
 
                 ArticleUi(
@@ -71,7 +71,7 @@ class DiscoverViewModel @Inject constructor(
             val response = predictionService.predict(articleUi.title, articleUi.id)
             var predictionResult: String? = null
             if (null != response) {
-                predictionResult = predictionToString(response)
+                predictionResult = predictionService.predictionToString(response)
             }
 
             withContext(Dispatchers.Main) {
@@ -82,7 +82,7 @@ class DiscoverViewModel @Inject constructor(
 
     fun toggleFavorite(articleUi: ArticleUi) {
         viewModelScope.launch(Dispatchers.IO) {
-            newsService.toggleFavorite(articleUi.id)
+            newsService.toggleFavorite(articleUi.id, articleUi.isFavorite)
         }
     }
 
@@ -95,14 +95,5 @@ class DiscoverViewModel @Inject constructor(
                 it
             }
         }
-    }
-
-    private fun predictionToString(response: PredictionResult): String {
-        return "This is probably " +
-                if (response.isFake) {
-                    "fake with a " + String.format("%.2f", response.isFakeConfidence) + "% confidence"
-                } else {
-                    "real with a " + String.format("%.2f", response.isRealConfidence)  + "% confidence"
-                }
     }
 }
