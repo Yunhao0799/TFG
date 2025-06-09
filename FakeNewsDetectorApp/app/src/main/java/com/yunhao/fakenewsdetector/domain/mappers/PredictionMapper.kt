@@ -15,18 +15,19 @@ fun PredictionResponseDTO.toDomain(): PredictionResult {
 }
 
 fun NewsResponseDTO.toDomain(): GetNewsResult {
-    val articles = mutableListOf<Article>()
-    for (article in data.articles) {
-        articles.add(
+    val articles = listOfNotNull(this.articles, this.favorites)
+        .flatten()
+        .map { article ->
             Article(
-                article.title,
-                article.description,
-                article.urlToImage,
-                article.url,
-                article.publishedAt,
+                id = article.id,
+                title = article.title,
+                description = article.description,
+                imageUrl = article.urlToImage,
+                url = article.url,
+                publishedAt = article.publishedAt,
+                isFavorite = article.isFavorite,
+                prediction = article.prediction
             )
-        )
-    }
-
+        }
     return GetNewsResult(articles)
 }

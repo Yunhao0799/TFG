@@ -3,6 +3,7 @@ package com.yunhao.fakenewsdetector.domain.services
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import com.yunhao.fakenewsdetector.data.model.FavoriteToggleDTO
 import com.yunhao.fakenewsdetector.data.network.ApiClient
 import com.yunhao.fakenewsdetector.domain.mappers.toDomain
 import com.yunhao.fakenewsdetector.domain.model.GetNewsResult
@@ -33,6 +34,31 @@ class NewsService @Inject constructor() : Service(), INewsService {
             val errorMessage = e.message ?: "Unknown error"
             Timber.e("Failed to get the latest news: $errorMessage")
             null
+        }
+    }
+
+    override suspend fun getFavorites(): GetNewsResult? {
+        return try {
+            val response = ApiClient.instance.getFavorites()
+            if (response.isSuccessful) {
+                response.body()?.toDomain()
+            } else {
+                Timber.e("Failed to get the favorites: ${response.errorBody()}")
+                null
+            }
+        } catch (e: Exception) {
+            val errorMessage = e.message ?: "Unknown error"
+            Timber.e("Failed to get the favorites: $errorMessage")
+            null
+        }
+    }
+
+    override suspend fun toggleFavorite(articleId: Int, isFavorite: Boolean): Boolean {
+        return try {
+            val response = ApiClient.instance.toggleFavorite(FavoriteToggleDTO(articleId, isFavorite))
+            response.isSuccessful
+        } catch (e: Exception) {
+            false
         }
     }
 }

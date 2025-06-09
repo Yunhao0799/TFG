@@ -11,9 +11,9 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class PredictionService @Inject constructor() : Service(), IPredictionService {
-    override suspend fun predict(string: String): PredictionResult? {
+    override suspend fun predict(string: String, articleId: Int?): PredictionResult? {
         return try {
-            val response = ApiClient.instance.predict(PredictionDTO(string))
+            val response = ApiClient.instance.predict(PredictionDTO(string, articleId))
             if (response.isSuccessful) {
                 response.body()?.toDomain()
             } else {
@@ -25,6 +25,15 @@ class PredictionService @Inject constructor() : Service(), IPredictionService {
             Timber.e("Prediction error: ${e.message}")
             null
         }
+    }
+
+    override fun predictionToString(response: PredictionResult): String {
+        return "This is probably " +
+                if (response.isFake) {
+                    "fake with a " + String.format("%.2f", response.isFakeConfidence) + "% confidence"
+                } else {
+                    "real with a " + String.format("%.2f", response.isRealConfidence)  + "% confidence"
+                }
     }
 
     override fun onBind(intent: Intent?): IBinder? {

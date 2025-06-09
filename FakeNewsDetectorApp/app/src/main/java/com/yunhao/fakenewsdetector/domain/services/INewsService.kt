@@ -8,4 +8,8 @@ interface INewsService{
                         country: String? = null,
                         category: String? = null,
                         endpoint: String? = null) : GetNewsResult?
+
+    suspend fun getFavorites() : GetNewsResult?
+
+    suspend fun toggleFavorite(articleId: Int, isFavorite: Boolean) : Boolean
 }

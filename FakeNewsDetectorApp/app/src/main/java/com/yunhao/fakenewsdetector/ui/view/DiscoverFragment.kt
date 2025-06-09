@@ -38,10 +38,11 @@ class DiscoverFragment : FragmentBase<FragmentDiscoverBinding, ViewModelBase>() 
 
         adapter = NewsAdapter(
             {
-                requireContext().openUrl(it.url)
+                it.url?.let { url -> requireContext().openUrl(url) }
             },
             {
                 Timber.d("On Like")
+                viewModel.toggleFavorite(it)
             },
             {
                 Timber.d("On prediction callback")

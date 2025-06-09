@@ -7,9 +7,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
+import json, ast
 
 from django.contrib.auth import authenticate, login, logout
 
+from newsCache.models import NewsArticle
 from users.serializers import CustomUserSerializer
 
 from aiModule.InferenceManager import Model
@@ -71,20 +73,36 @@ class LogoutView(APIView):
 class PredictionView(APIView):
     def post(self, request, *args, **kwargs):
         input_string = request.data.get('input_string')
+        article_id = request.data.get('id')
 
         # Validate input data
         if not input_string or not isinstance(input_string, str):
             return Response({'error': 'input_string parameter is required and must be a string'},
                             status=status.HTTP_400_BAD_REQUEST)
 
+        article = None
+        if article_id is not None:
+            try:
+                article = NewsArticle.objects.get(id=article_id)
+                if article.prediction is not None:
+                    return Response(ast.literal_eval(article.prediction), status=status.HTTP_200_OK)
+
+            except NewsArticle.DoesNotExist:
+                return Response({'error': 'NewsArticle with the given ID does not exist'},
+                                status=status.HTTP_404_NOT_FOUND)
+
         # Call the prediction function
         prediction, real_confidence, fake_confidence = InferenceManager()[Model.ROBERTA].infer(input_string)
-
         prediction_string = "fake" if prediction == 1 else "real"
-
-        # Return the prediction result
-        return Response({
+        response = {
             'prediction': prediction_string,
             'realConfidence': real_confidence * 100,
             'fakeConfidence': fake_confidence * 100
-        }, status=status.HTTP_200_OK)
+        }
+
+        if article is not None:
+            article.prediction = response
+            article.save()
+
+        # Return the prediction result
+        return Response(response, status=status.HTTP_200_OK)

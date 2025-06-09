@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.yunhao.fakenewsdetector.data.model.PredictionResponseDTO
 import com.yunhao.fakenewsdetector.domain.mappers.toDomain
-import com.yunhao.fakenewsdetector.domain.model.PredictionResult
 import com.yunhao.fakenewsdetector.domain.services.NewsService
 import com.yunhao.fakenewsdetector.domain.services.PredictionService
 import com.yunhao.fakenewsdetector.ui.utils.eventAggregator.EventAggregator
@@ -21,7 +20,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class DiscoverViewModel @Inject constructor(
+class FavoritesViewModel @Inject constructor(
     private val newsService: NewsService,
     private val eventAggregator: EventAggregator,
     private val predictionService: PredictionService,
@@ -33,7 +32,7 @@ class DiscoverViewModel @Inject constructor(
     fun fetchNews(onFinishCallback: (() -> Unit)? = null) {
         viewModelScope.launch(Dispatchers.IO) {
             eventAggregator.publish(PopupEvent.ShowBusyDialog())
-            val result = newsService.getNews(endpoint="top-headlines", country = "us")
+            val result = newsService.getFavorites()
             Timber.d("$result")
 
             val gson = Gson()
@@ -61,21 +60,6 @@ class DiscoverViewModel @Inject constructor(
 
             withContext(Dispatchers.Main) {
                 onFinishCallback?.invoke()
-            }
-        }
-    }
-
-    fun predictNew(articleUi: ArticleUi) {
-        viewModelScope.launch(Dispatchers.IO) {
-            // delay(10000)
-            val response = predictionService.predict(articleUi.title, articleUi.id)
-            var predictionResult: String? = null
-            if (null != response) {
-                predictionResult = predictionService.predictionToString(response)
-            }
-
-            withContext(Dispatchers.Main) {
-                updateArticle(articleUi.copy(predictionResult = predictionResult, isPredicting = false))
             }
         }
     }
